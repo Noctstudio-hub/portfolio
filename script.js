@@ -1,0 +1,165 @@
+// ============================================
+// LOADER
+// ============================================
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        document.getElementById('loader').classList.add('hidden');
+        document.body.style.overflow = '';
+        animateHero();
+    }, 1200);
+});
+
+// ============================================
+// CUSTOM CURSOR
+// ============================================
+const cursor = document.getElementById('cursor');
+const follower = document.getElementById('cursorFollower');
+let mouseX = 0, mouseY = 0;
+let followerX = 0, followerY = 0;
+
+document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursor.style.left = mouseX - 4 + 'px';
+    cursor.style.top = mouseY - 4 + 'px';
+});
+
+function animateFollower() {
+    followerX += (mouseX - followerX) * 0.1;
+    followerY += (mouseY - followerY) * 0.1;
+    follower.style.left = followerX - 20 + 'px';
+    follower.style.top = followerY - 20 + 'px';
+    requestAnimationFrame(animateFollower);
+}
+animateFollower();
+
+// Hover effect on interactive elements
+const hoverElements = document.querySelectorAll('a, button, input, textarea, select, .project');
+hoverElements.forEach(el => {
+    el.addEventListener('mouseenter', () => follower.classList.add('hovering'));
+    el.addEventListener('mouseleave', () => follower.classList.remove('hovering'));
+});
+
+// ============================================
+// NAVIGATION
+// ============================================
+const nav = document.getElementById('nav');
+const navMenu = document.getElementById('navMenu');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileLinks = document.querySelectorAll('.mobile-link');
+
+window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+navMenu.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
+    mobileMenu.classList.toggle('open');
+    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+});
+
+mobileLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        navMenu.classList.remove('active');
+        mobileMenu.classList.remove('open');
+        document.body.style.overflow = '';
+    });
+});
+
+// ============================================
+// HERO ANIMATIONS
+// ============================================
+function animateHero() {
+    const elements = document.querySelectorAll('.hero [data-animate]');
+    elements.forEach((el, i) => {
+        setTimeout(() => {
+            el.classList.add('visible');
+        }, i * 120);
+    });
+}
+
+// ============================================
+// SCROLL REVEAL
+// ============================================
+const animatedElements = document.querySelectorAll('[data-animate]:not(.hero [data-animate])');
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+        }
+    });
+}, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -60px 0px'
+});
+
+animatedElements.forEach(el => observer.observe(el));
+
+// ============================================
+// SMOOTH SCROLL
+// ============================================
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+});
+
+// ============================================
+// CONTACT FORM
+// ============================================
+const form = document.getElementById('contactForm');
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const btn = form.querySelector('.btn-submit');
+    const original = btn.innerHTML;
+
+    btn.innerHTML = '<span>Envoi en cours...</span>';
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = '0.7';
+
+    setTimeout(() => {
+        btn.innerHTML = '<span>Message envoyé !</span>';
+        btn.style.opacity = '1';
+        btn.style.background = '#22c55e';
+
+        setTimeout(() => {
+            btn.innerHTML = original;
+            btn.style.pointerEvents = '';
+            btn.style.background = '';
+            form.reset();
+        }, 3000);
+    }, 1500);
+});
+
+// ============================================
+// MAGNETIC EFFECT ON PROJECTS (Desktop)
+// ============================================
+if (window.innerWidth > 768) {
+    const projects = document.querySelectorAll('.project');
+
+    projects.forEach(project => {
+        project.addEventListener('mousemove', (e) => {
+            const rect = project.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+            const moveX = (x - centerX) / 30;
+            const moveY = (y - centerY) / 30;
+
+            project.style.transform = `translateY(-4px) translate(${moveX}px, ${moveY}px)`;
+        });
+
+        project.addEventListener('mouseleave', () => {
+            project.style.transform = '';
+        });
+    });
+}

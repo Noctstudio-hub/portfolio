@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio — Portfolio Créatif</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+        <div class="loader-inner">
+            <div class="loader-line"></div>
+            <span class="loader-text">Studio</span>
+        </div>
+    </div>
+
+    <!-- Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-follower" id="cursorFollower"></div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <div class="nav-inner">
+            <a href="#" class="nav-logo">Studio<span class="nav-logo-dot">.</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#work" class="nav-link">Projets</a></li>
+                <li><a href="#about" class="nav-link">À propos</a></li>
+                <li><a href="#services" class="nav-link">Services</a></li>
+                <li><a href="#contact" class="nav-link nav-link-cta">Parlons-en</a></li>
+            </ul>
+            <button class="nav-menu" id="navMenu" aria-label="Menu">
+                <span class="nav-menu-line"></span>
+                <span class="nav-menu-line"></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-inner">
+            <a href="#work" class="mobile-link">Projets</a>
+            <a href="#about" class="mobile-link">À propos</a>
+            <a href="#services" class="mobile-link">Services</a>
+            <a href="#contact" class="mobile-link">Contact</a>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <header class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-tag" data-animate="fade-up">
+                <span class="hero-tag-dot"></span>
+                Disponible pour de nouveaux projets
+            </div>
+            <h1 class="hero-title" data-animate="fade-up" data-delay="1">
+                Je crée des<br>
+                <em>expériences</em> digitales<br>
+                qui <em>marquent</em>
+            </h1>
+            <p class="hero-subtitle" data-animate="fade-up" data-delay="2">
+                Développeur & Designer — Basé à Paris
+            </p>
+        </div>
+        <div class="hero-scroll" data-animate="fade-up" data-delay="3">
+            <div class="hero-scroll-line"></div>
+            <span>Scroll</span>
+        </div>
+        <div class="hero-marquee">
+            <div class="marquee-track">
+                <span>Design &nbsp;·&nbsp; Développement &nbsp;·&nbsp; Branding &nbsp;·&nbsp; UI/UX &nbsp;·&nbsp; Stratégie &nbsp;·&nbsp; </span>
+                <span>Design &nbsp;·&nbsp; Développement &nbsp;·&nbsp; Branding &nbsp;·&nbsp; UI/UX &nbsp;·&nbsp; Stratégie &nbsp;·&nbsp; </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Projects -->
+    <section class="section" id="work">
+        <div class="container">
+            <div class="section-top">
+                <span class="section-label" data-animate="fade-up">( 01 )</span>
+                <h2 class="section-heading" data-animate="fade-up">
+                    Projets <em>sélectionnés</em>
+                </h2>
+            </div>
+
+            <div class="projects-grid">
+                <a href="#" class="project" data-animate="fade-up">
+                    <div class="project-img">
+                        <div class="project-img-inner" style="background: linear-gradient(135deg, #1a1a2e, #16213e);">
+                            <span class="project-img-label">01</span>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3 class="project-name">E-Commerce Platform</h3>
+                        <span class="project-cat">Web App — 2025</span>
+                    </div>
+                </a>
+
+                <a href="#" class="project" data-animate="fade-up">
+                    <div class="project-img">
+                        <div class="project-img-inner" style="background: linear-gradient(135deg, #0f0f23, #1b1b3a);">
+                            <span class="project-img-label">02</span>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3 class="project-name">Fitness App</h3>
+                        <span class="project-cat">Mobile — 2025</span>
+                    </div>
+                </a>
+
+                <a href="#" class="project project-wide" data-animate="fade-up">
+                    <div class="project-img">
+                        <div class="project-img-inner" style="background: linear-gradient(135deg, #1a0a2e, #2d1b69);">
+                            <span class="project-img-label">03</span>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3 class="project-name">Dashboard Analytics</h3>
+                        <span class="project-cat">Design System — 2024</span>
+                    </div>
+                </a>
+
+                <a href="#" class="project" data-animate="fade-up">
+                    <div class="project-img">
+                        <div class="project-img-inner" style="background: linear-gradient(135deg, #0a192f, #172a45);">
+                            <span class="project-img-label">04</span>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3 class="project-name">SaaS Landing Page</h3>
+                        <span class="project-cat">Web Design — 2024</span>
+                    </div>
+                </a>
+
+                <a href="#" class="project" data-animate="fade-up">
+                    <div class="project-img">
+                        <div class="project-img-inner" style="background: linear-gradient(135deg, #1a1a1a, #2d2d2d);">
+                            <span class="project-img-label">05</span>
+                        </div>
+                    </div>
+                    <div class="project-info">
+                        <h3 class="project-name">Brand Identity</h3>
+                        <span class="project-cat">Branding — 2024</span>
+                    </div>
+                </a>
+            </div>
+
+            <div class="section-cta" data-animate="fade-up">
+                <a href="#" class="link-arrow">
+                    <span>Voir tous les projets</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About -->
+    <section class="section section-dark" id="about">
+        <div class="container">
+            <div class="about-layout">
+                <div class="about-left">
+                    <span class="section-label" data-animate="fade-up">( 02 )</span>
+                    <h2 class="section-heading section-heading-lg" data-animate="fade-up">
+                        Le design doit<br>sembler <em>naturel</em>
+                    </h2>
+                </div>
+                <div class="about-right">
+                    <p class="about-text" data-animate="fade-up">
+                        Je suis un développeur et designer passionné, spécialisé dans la création
+                        d'expériences digitales qui allient esthétique et performance. Mon approche
+                        est guidée par la simplicité, la clarté et l'impact.
+                    </p>
+                    <p class="about-text" data-animate="fade-up">
+                        Chaque projet est une opportunité de repousser les limites du possible,
+                        en créant des solutions sur-mesure qui répondent parfaitement aux besoins
+                        de mes clients.
+                    </p>
+                    <div class="about-stats" data-animate="fade-up">
+                        <div class="about-stat">
+                            <span class="about-stat-num">3+</span>
+                            <span class="about-stat-label">Années d'expérience</span>
+                        </div>
+                        <div class="about-stat">
+                            <span class="about-stat-num">25+</span>
+                            <span class="about-stat-label">Projets livrés</span>
+                        </div>
+                        <div class="about-stat">
+                            <span class="about-stat-num">15+</span>
+                            <span class="about-stat-label">Clients satisfaits</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services -->
+    <section class="section" id="services">
+        <div class="container">
+            <div class="section-top">
+                <span class="section-label" data-animate="fade-up">( 03 )</span>
+                <h2 class="section-heading" data-animate="fade-up">
+                    Ce que je <em>fais</em>
+                </h2>
+            </div>
+
+            <div class="services-list">
+                <div class="service" data-animate="fade-up">
+                    <span class="service-num">01</span>
+                    <div class="service-content">
+                        <h3 class="service-title">Design UI/UX</h3>
+                        <p class="service-desc">Interfaces intuitives et esthétiques, wireframes, prototypes interactifs et design systems complets.</p>
+                    </div>
+                    <div class="service-tags">
+                        <span>Figma</span>
+                        <span>Prototyping</span>
+                        <span>Design System</span>
+                    </div>
+                </div>
+
+                <div class="service" data-animate="fade-up">
+                    <span class="service-num">02</span>
+                    <div class="service-content">
+                        <h3 class="service-title">Développement Front-End</h3>
+                        <p class="service-desc">Sites et applications web performants avec les technologies modernes, animations fluides et responsive design.</p>
+                    </div>
+                    <div class="service-tags">
+                        <span>React</span>
+                        <span>Next.js</span>
+                        <span>TypeScript</span>
+                    </div>
+                </div>
+
+                <div class="service" data-animate="fade-up">
+                    <span class="service-num">03</span>
+                    <div class="service-content">
+                        <h3 class="service-title">Développement Back-End</h3>
+                        <p class="service-desc">APIs robustes, bases de données optimisées et architectures scalables pour vos projets ambitieux.</p>
+                    </div>
+                    <div class="service-tags">
+                        <span>Node.js</span>
+                        <span>Python</span>
+                        <span>PostgreSQL</span>
+                    </div>
+                </div>
+
+                <div class="service" data-animate="fade-up">
+                    <span class="service-num">04</span>
+                    <div class="service-content">
+                        <h3 class="service-title">Branding & Identité</h3>
+                        <p class="service-desc">Création d'identités visuelles fortes et cohérentes qui reflètent l'essence de votre marque.</p>
+                    </div>
+                    <div class="service-tags">
+                        <span>Logo</span>
+                        <span>Charte graphique</span>
+                        <span>Direction artistique</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact -->
+    <section class="section section-dark" id="contact">
+        <div class="container">
+            <div class="contact-layout">
+                <div class="contact-left">
+                    <span class="section-label" data-animate="fade-up">( 04 )</span>
+                    <h2 class="section-heading section-heading-xl" data-animate="fade-up">
+                        Créons quelque<br>chose d'<em>unique</em>
+                    </h2>
+                    <p class="contact-text" data-animate="fade-up">
+                        Vous avez un projet en tête ? Discutons-en et voyons
+                        comment donner vie à votre vision.
+                    </p>
+                    <div class="contact-details" data-animate="fade-up">
+                        <a href="mailto:votre@email.com" class="contact-detail">
+                            votre@email.com
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                            </svg>
+                        </a>
+                        <a href="tel:+33600000000" class="contact-detail">
+                            +33 6 00 00 00 00
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="contact-right" data-animate="fade-up">
+                    <form class="form" id="contactForm">
+                        <div class="form-group">
+                            <label class="form-label">Nom</label>
+                            <input type="text" class="form-input" placeholder="Votre nom" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" placeholder="votre@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Sujet</label>
+                            <select class="form-input form-select">
+                                <option value="">Sélectionnez un sujet</option>
+                                <option value="web">Site Web</option>
+                                <option value="app">Application</option>
+                                <option value="design">Design</option>
+                                <option value="branding">Branding</option>
+                                <option value="other">Autre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Message</label>
+                            <textarea class="form-input form-textarea" placeholder="Décrivez votre projet..." rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">
+                            <span>Envoyer le message</span>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M7 17L17 7M17 7H7M17 7V17"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <a href="#" class="footer-logo">Studio<span class="nav-logo-dot">.</span></a>
+                <div class="footer-socials">
+                    <a href="#" class="footer-social">GitHub</a>
+                    <a href="#" class="footer-social">LinkedIn</a>
+                    <a href="#" class="footer-social">Twitter</a>
+                    <a href="#" class="footer-social">Dribbble</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Studio. Tous droits réservés.</span>
+                <span>Conçu avec passion à Paris</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
