@@ -67,14 +67,43 @@ mobileLinks.forEach(link => {
 });
 
 // ============================================
+// HERO TILES
+// ============================================
+(function buildHeroTiles() {
+    const container = document.getElementById('heroTiles');
+    if (!container) return;
+
+    const cols = 7;
+    const heights = [85, 100, 70, 95, 75, 100, 80];
+
+    for (let i = 0; i < cols; i++) {
+        const tile = document.createElement('div');
+        tile.className = 'hero-tile';
+        tile.style.height = heights[i] + '%';
+        tile.style.alignSelf = i % 2 === 0 ? 'flex-end' : 'flex-start';
+        tile.style.backgroundPosition = ((i / (cols - 1)) * 100) + '% center';
+        tile.style.backgroundSize = (cols * 100) + '% auto';
+        container.appendChild(tile);
+    }
+})();
+
+// ============================================
 // HERO ANIMATIONS
 // ============================================
 function animateHero() {
+    const tiles = document.querySelectorAll('.hero-tile');
+    tiles.forEach((tile, i) => {
+        setTimeout(() => {
+            tile.classList.add('visible');
+        }, i * 100);
+    });
+
+    const textDelay = tiles.length * 100 + 200;
     const elements = document.querySelectorAll('.hero [data-animate]');
     elements.forEach((el, i) => {
         setTimeout(() => {
             el.classList.add('visible');
-        }, i * 120);
+        }, textDelay + i * 120);
     });
 }
 
