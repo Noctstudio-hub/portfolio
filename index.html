@@ -20,25 +20,6 @@
     <div class="cursor" id="cursor"></div>
     <div class="cursor-follower" id="cursorFollower"></div>
 
-    <!-- Navigation -->
-    <nav class="nav" id="nav">
-        <div class="nav-inner">
-            <a href="#" class="nav-logo" data-nav-anim>
-                <span class="nav-logo-icon">N</span>
-            </a>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="#hero" class="nav-link" data-nav-anim>Home</a></li>
-                <li><a href="#about" class="nav-link" data-nav-anim>Studio</a></li>
-                <li><a href="#work" class="nav-link" data-nav-anim>Works</a></li>
-                <li><a href="#services" class="nav-link" data-nav-anim>Pricing</a></li>
-            </ul>
-            <button class="nav-menu" id="navMenu" aria-label="Menu" data-nav-anim>
-                <span class="nav-menu-line"></span>
-                <span class="nav-menu-line"></span>
-            </button>
-        </div>
-    </nav>
-
     <!-- Mobile Menu Overlay -->
     <div class="mobile-menu" id="mobileMenu">
         <div class="mobile-menu-inner">
@@ -52,7 +33,26 @@
     <!-- Hero -->
     <header class="hero" id="hero">
         <div class="hero-tiles" id="heroTiles"></div>
-        <div class="hero-overlay"></div>
+        <div class="hero-overlay">
+            <!-- Navigation — sticky inside the card -->
+            <nav class="nav" id="nav">
+                <div class="nav-inner">
+                    <a href="#" class="nav-logo" data-nav-anim>
+                        <span class="nav-logo-icon">N</span>
+                    </a>
+                    <ul class="nav-links" id="navLinks">
+                        <li><a href="#hero" class="nav-link" data-nav-anim>Home</a></li>
+                        <li><a href="#about" class="nav-link" data-nav-anim>Studio</a></li>
+                        <li><a href="#work" class="nav-link" data-nav-anim>Works</a></li>
+                        <li><a href="#services" class="nav-link" data-nav-anim>Pricing</a></li>
+                    </ul>
+                    <button class="nav-menu" id="navMenu" aria-label="Menu" data-nav-anim>
+                        <span class="nav-menu-line"></span>
+                        <span class="nav-menu-line"></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
         <div class="hero-content">
             <div class="hero-tag" data-animate="fade-up">
                 <span class="hero-tag-dot"></span>

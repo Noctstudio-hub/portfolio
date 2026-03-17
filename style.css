@@ -33,7 +33,6 @@
 
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 80px;
     font-size: 16px;
 }
 
@@ -171,19 +170,12 @@ img { max-width: 100%; display: block; }
    NAVIGATION
    ============================================ */
 .nav {
-    position: fixed;
+    position: sticky;
     top: 0;
-    left: 0;
-    right: 0;
     z-index: 100;
-    padding: 12px 0;
+    padding: 14px 0;
     background: transparent;
     border: none;
-    transition: padding 0.4s var(--ease);
-}
-
-.nav.scrolled {
-    padding: 8px 0;
 }
 
 .nav-inner {
@@ -370,7 +362,7 @@ img { max-width: 100%; display: block; }
     transform: translateY(0) !important;
 }
 
-/* Dark overlay on top of tiles */
+/* Dark overlay on top of tiles — contains the sticky nav */
 .hero-overlay {
     position: absolute;
     inset: 14px;
@@ -383,6 +375,10 @@ img { max-width: 100%; display: block; }
     );
     z-index: 1;
     pointer-events: none;
+}
+
+.hero-overlay .nav {
+    pointer-events: auto;
 }
 
 /* Hero content — bottom left inside the card */

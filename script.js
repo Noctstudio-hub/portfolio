@@ -1,7 +1,16 @@
 // ============================================
+// FORCE SCROLL TO TOP
+// ============================================
+window.scrollTo(0, 0);
+if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+}
+
+// ============================================
 // LOADER
 // ============================================
 window.addEventListener('load', () => {
+    window.scrollTo(0, 0);
     setTimeout(() => {
         document.getElementById('loader').classList.add('hidden');
         document.body.style.overflow = '';
@@ -47,10 +56,6 @@ const nav = document.getElementById('nav');
 const navMenu = document.getElementById('navMenu');
 const mobileMenu = document.getElementById('mobileMenu');
 const mobileLinks = document.querySelectorAll('.mobile-link');
-
-window.addEventListener('scroll', () => {
-    nav.classList.toggle('scrolled', window.scrollY > 60);
-});
 
 navMenu.addEventListener('click', () => {
     navMenu.classList.toggle('active');
