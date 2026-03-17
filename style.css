@@ -179,12 +179,11 @@ img { max-width: 100%; display: block; }
 }
 
 .nav-inner {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 clamp(20px, 4vw, 60px);
+    padding: 0 16px;
     display: flex;
     align-items: center;
-    gap: 32px;
+    gap: 24px;
+    justify-content: flex-start;
 }
 
 .nav-logo {
