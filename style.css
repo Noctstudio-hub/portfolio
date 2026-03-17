@@ -255,14 +255,25 @@ img { max-width: 100%; display: block; }
 .nav-menu {
     display: none;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     gap: 6px;
-    padding: 8px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.08);
     z-index: 101;
+    transition: background 0.3s var(--ease);
+}
+
+.nav-menu:hover {
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .nav-menu-line {
     display: block;
-    width: 28px;
+    width: 18px;
     height: 1.5px;
     background: var(--white);
     transition: all 0.4s var(--ease);
@@ -335,6 +346,7 @@ img { max-width: 100%; display: block; }
     background: var(--black);
     padding: 14px;
     margin: 0;
+    display: flex;
 }
 
 /* The rounded card */
@@ -951,7 +963,9 @@ img { max-width: 100%; display: block; }
     .nav-menu { display: flex; }
 
     .hero {
-        padding: 10px;
+        padding: 8px;
+        padding-top: 8px;
+        height: 100dvh;
     }
 
     .hero-card {
@@ -959,17 +973,33 @@ img { max-width: 100%; display: block; }
     }
 
     .hero-card .nav {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
         border-radius: 16px 16px 0 0;
     }
 
+    .nav-inner {
+        padding: 0 12px;
+        justify-content: flex-start;
+    }
+
+    .nav-menu {
+        margin-left: auto;
+    }
+
     .hero-title {
-        font-size: clamp(2rem, 8vw, 3rem);
+        font-size: clamp(1.8rem, 7vw, 2.8rem);
     }
 
     .hero-content {
-        max-width: 85%;
-        left: 20px;
-        bottom: 30px;
+        position: absolute;
+        bottom: 24px;
+        left: 16px;
+        right: 16px;
+        max-width: none;
+        z-index: 2;
     }
 
     .projects-grid {
