@@ -74,13 +74,13 @@ mobileLinks.forEach(link => {
     if (!container) return;
 
     const cols = 7;
-    const heights = [85, 100, 70, 95, 75, 100, 80];
+    // Staggered starting offsets — larger = arrives from further down
+    const offsets = [120, 200, 80, 180, 100, 220, 140];
 
     for (let i = 0; i < cols; i++) {
         const tile = document.createElement('div');
         tile.className = 'hero-tile';
-        tile.style.height = heights[i] + '%';
-        tile.style.alignSelf = i % 2 === 0 ? 'flex-end' : 'flex-start';
+        tile.style.transform = 'translateY(' + offsets[i] + 'px)';
         tile.style.backgroundPosition = ((i / (cols - 1)) * 100) + '% center';
         tile.style.backgroundSize = (cols * 100) + '% auto';
         container.appendChild(tile);
