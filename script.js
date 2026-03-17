@@ -75,7 +75,7 @@ mobileLinks.forEach(link => {
 
     const cols = 7;
     // Staggered starting offsets — larger = arrives from further down
-    const offsets = [120, 200, 80, 180, 100, 220, 140];
+    const offsets = [150, 280, 100, 250, 130, 300, 180];
 
     for (let i = 0; i < cols; i++) {
         const tile = document.createElement('div');
