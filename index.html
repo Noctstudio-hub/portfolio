@@ -20,36 +20,39 @@
     <div class="cursor" id="cursor"></div>
     <div class="cursor-follower" id="cursorFollower"></div>
 
-    <!-- Mobile Menu Overlay -->
-    <div class="mobile-menu" id="mobileMenu">
-        <div class="mobile-menu-inner">
-            <a href="#hero" class="mobile-link">Home</a>
-            <a href="#about" class="mobile-link">Studio</a>
-            <a href="#work" class="mobile-link">Works</a>
-            <a href="#services" class="mobile-link">Pricing</a>
-        </div>
-    </div>
-
     <!-- Hero -->
     <section class="hero" id="hero">
         <div class="hero-card">
-            <!-- Header INSIDE the card -->
+            <!-- Header INSIDE the card (Sonido pattern) -->
             <header class="hero-header" id="nav">
                 <div class="nav-inner">
-                    <a href="#" class="nav-logo" data-nav-anim>
-                        <span class="nav-logo-icon">N</span>
-                    </a>
-                    <ul class="nav-links" id="navLinks">
-                        <li><a href="#hero" class="nav-link" data-nav-anim>Home</a></li>
-                        <li><a href="#about" class="nav-link" data-nav-anim>Studio</a></li>
-                        <li><a href="#work" class="nav-link" data-nav-anim>Works</a></li>
-                        <li><a href="#services" class="nav-link" data-nav-anim>Pricing</a></li>
-                    </ul>
-                    <button class="nav-menu" id="navMenu" aria-label="Menu" data-nav-anim>
-                        <span class="nav-menu-line"></span>
-                        <span class="nav-menu-line"></span>
-                    </button>
+                    <!-- Left: logo + desktop links -->
+                    <div class="navbar-left" data-nav-anim>
+                        <a href="#" class="nav-logo">
+                            <span class="nav-logo-icon">N</span>
+                        </a>
+                        <ul class="nav-links">
+                            <li><a href="#hero" class="nav-link" data-nav-anim>Home</a></li>
+                            <li><a href="#about" class="nav-link" data-nav-anim>Studio</a></li>
+                            <li><a href="#work" class="nav-link" data-nav-anim>Works</a></li>
+                            <li><a href="#services" class="nav-link" data-nav-anim>Pricing</a></li>
+                        </ul>
+                    </div>
+                    <!-- Right: burger (mobile only) -->
+                    <div class="mobile-content" data-nav-anim>
+                        <button class="nav-menu" id="navMenu" aria-label="Menu">
+                            <span class="nav-menu-line"></span>
+                            <span class="nav-menu-line"></span>
+                        </button>
+                    </div>
                 </div>
+                <!-- Mobile dropdown nav (duplicate links — Sonido pattern) -->
+                <nav class="nav-mobile" id="navMobile">
+                    <a href="#hero" class="nav-mobile-link">Home</a>
+                    <a href="#about" class="nav-mobile-link">Studio</a>
+                    <a href="#work" class="nav-mobile-link">Works</a>
+                    <a href="#services" class="nav-mobile-link">Pricing</a>
+                </nav>
             </header>
             <!-- Image area filling the card -->
             <div class="hero-image">

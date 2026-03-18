@@ -51,24 +51,22 @@ hoverElements.forEach(el => {
 });
 
 // ============================================
-// NAVIGATION
+// NAVIGATION (Sonido pattern — dropdown menu)
 // ============================================
 const nav = document.getElementById('nav');
 const navMenu = document.getElementById('navMenu');
-const mobileMenu = document.getElementById('mobileMenu');
-const mobileLinks = document.querySelectorAll('.mobile-link');
+const navMobile = document.getElementById('navMobile');
+const mobileLinks = document.querySelectorAll('.nav-mobile-link');
 
 navMenu.addEventListener('click', () => {
     navMenu.classList.toggle('active');
-    mobileMenu.classList.toggle('open');
-    document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    navMobile.classList.toggle('open');
 });
 
 mobileLinks.forEach(link => {
     link.addEventListener('click', () => {
         navMenu.classList.remove('active');
-        mobileMenu.classList.remove('open');
-        document.body.style.overflow = '';
+        navMobile.classList.remove('open');
     });
 });
 
