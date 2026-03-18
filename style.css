@@ -390,7 +390,7 @@ img { max-width: 100%; display: block; }
 .hero-tile {
     flex: 1;
     height: 100%;
-    background-image: url('hero-bg.jpg.jpg');
+    background-image: url('hero_bg.png');
     background-repeat: no-repeat;
     opacity: 0;
     transition: opacity 0.8s ease, transform 0.8s ease;
