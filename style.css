@@ -349,12 +349,12 @@ img { max-width: 100%; display: block; }
     display: flex;
 }
 
-/* The rounded card */
+/* The rounded card — same pattern as .project: border-radius + overflow hidden */
 .hero-card {
     position: relative;
     width: 100%;
     height: 100%;
-    border-radius: 20px;
+    border-radius: 16px;
     overflow: hidden;
 }
 
@@ -363,7 +363,7 @@ img { max-width: 100%; display: block; }
     position: sticky;
     top: 0;
     z-index: 10;
-    border-radius: 20px 20px 0 0;
+    border-radius: 16px 16px 0 0;
 }
 
 /* Tiles behind everything */
@@ -392,7 +392,7 @@ img { max-width: 100%; display: block; }
 .hero-overlay {
     position: absolute;
     inset: 0;
-    border-radius: 20px;
+    border-radius: 0;
     background: linear-gradient(
         to top,
         rgba(10, 10, 10, 0.85) 0%,
@@ -937,6 +937,20 @@ img { max-width: 100%; display: block; }
    RESPONSIVE
    ============================================ */
 @media (max-width: 1024px) {
+    /* Hero card keeps radius + margins on tablet, like project cards */
+    .hero {
+        padding: 12px;
+    }
+
+    .hero-card {
+        border-radius: 16px;
+        overflow: hidden;
+    }
+
+    .hero-card .nav {
+        border-radius: 16px 16px 0 0;
+    }
+
     .about-layout,
     .contact-layout {
         grid-template-columns: 1fr;
