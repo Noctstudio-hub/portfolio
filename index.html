@@ -31,10 +31,10 @@
     </div>
 
     <!-- Hero -->
-    <header class="hero" id="hero">
+    <section class="hero" id="hero">
         <div class="hero-card">
-            <!-- Navigation — sticky inside the card -->
-            <nav class="nav" id="nav">
+            <!-- Header INSIDE the card -->
+            <header class="hero-header" id="nav">
                 <div class="nav-inner">
                     <a href="#" class="nav-logo" data-nav-anim>
                         <span class="nav-logo-icon">N</span>
@@ -50,28 +50,29 @@
                         <span class="nav-menu-line"></span>
                     </button>
                 </div>
-            </nav>
-            <!-- Tiles background -->
-            <div class="hero-tiles" id="heroTiles"></div>
-            <!-- Overlay gradient -->
-            <div class="hero-overlay"></div>
-            <!-- Text content -->
-            <div class="hero-content">
-                <div class="hero-tag" data-animate="fade-up">
-                    <span class="hero-tag-dot"></span>
-                    Disponible pour de nouveaux projets
+            </header>
+            <!-- Image area filling the card -->
+            <div class="hero-image">
+                <div class="hero-tiles" id="heroTiles"></div>
+                <div class="hero-overlay"></div>
+                <!-- Text over the image -->
+                <div class="hero-text">
+                    <div class="hero-tag" data-animate="fade-up">
+                        <span class="hero-tag-dot"></span>
+                        Disponible pour de nouveaux projets
+                    </div>
+                    <h1 class="hero-title" data-animate="fade-up" data-delay="1">
+                        Je crée des<br>
+                        <em>expériences</em> digitales<br>
+                        qui <em>marquent</em>
+                    </h1>
+                    <p class="hero-subtitle" data-animate="fade-up" data-delay="2">
+                        Développeur & Designer — Basé à Paris
+                    </p>
                 </div>
-                <h1 class="hero-title" data-animate="fade-up" data-delay="1">
-                    Je crée des<br>
-                    <em>expériences</em> digitales<br>
-                    qui <em>marquent</em>
-                </h1>
-                <p class="hero-subtitle" data-animate="fade-up" data-delay="2">
-                    Développeur & Designer — Basé à Paris
-                </p>
             </div>
         </div>
-    </header>
+    </section>
 
     <!-- Projects -->
     <section class="section" id="work">

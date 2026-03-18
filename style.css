@@ -169,14 +169,6 @@ img { max-width: 100%; display: block; }
 /* ============================================
    NAVIGATION
    ============================================ */
-.nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    padding: 14px 0;
-    background: transparent;
-    border: none;
-}
 
 .nav-inner {
     padding: 0 16px;
@@ -342,28 +334,36 @@ img { max-width: 100%; display: block; }
    HERO
    ============================================ */
 .hero {
-    height: 100vh;
     background: var(--black);
-    padding: 14px;
-    margin: 0;
-    display: flex;
+    margin: 12px;
+    height: calc(100vh - 24px);
 }
 
-/* The rounded card — same pattern as .project: border-radius + overflow hidden */
+/* The rounded card */
 .hero-card {
-    position: relative;
+    display: flex;
+    flex-direction: column;
     width: 100%;
     height: 100%;
     border-radius: 16px;
     overflow: hidden;
 }
 
-/* Nav sticky inside the card */
-.hero-card .nav {
+/* Header inside the card — sticky */
+.hero-header {
     position: sticky;
     top: 0;
     z-index: 10;
-    border-radius: 16px 16px 0 0;
+    padding: 14px 0;
+    background: transparent;
+    flex-shrink: 0;
+}
+
+/* Image area fills remaining space */
+.hero-image {
+    position: relative;
+    flex: 1;
+    min-height: 0;
 }
 
 /* Tiles behind everything */
@@ -392,7 +392,6 @@ img { max-width: 100%; display: block; }
 .hero-overlay {
     position: absolute;
     inset: 0;
-    border-radius: 0;
     background: linear-gradient(
         to top,
         rgba(10, 10, 10, 0.85) 0%,
@@ -403,8 +402,8 @@ img { max-width: 100%; display: block; }
     pointer-events: none;
 }
 
-/* Text content — bottom left */
-.hero-content {
+/* Text over the image — bottom left */
+.hero-text {
     position: absolute;
     bottom: clamp(40px, 6vw, 80px);
     left: clamp(34px, 4vw, 80px);
@@ -937,18 +936,9 @@ img { max-width: 100%; display: block; }
    RESPONSIVE
    ============================================ */
 @media (max-width: 1024px) {
-    /* Hero card keeps radius + margins on tablet, like project cards */
     .hero {
-        padding: 12px;
-    }
-
-    .hero-card {
-        border-radius: 16px;
-        overflow: hidden;
-    }
-
-    .hero-card .nav {
-        border-radius: 16px 16px 0 0;
+        margin: 10px;
+        height: calc(100vh - 20px);
     }
 
     .about-layout,
@@ -976,43 +966,21 @@ img { max-width: 100%; display: block; }
     .nav-links { display: none; }
     .nav-menu { display: flex; margin-left: auto; }
 
-    /* --- Hero mobile fixes --- */
+    /* --- Hero mobile --- */
     .hero {
-        height: 100dvh;
-        padding: 8px;
-    }
-
-    .hero-card {
-        position: relative;
-        width: 100%;
-        height: 100%;
-        border-radius: 16px;
-        overflow: hidden;
-    }
-
-    /* Nav INSIDE the card, absolute so it doesn't push content */
-    .hero-card .nav {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 10;
-        border-radius: 16px 16px 0 0;
-        background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 100%);
+        margin: 8px;
+        height: calc(100dvh - 16px);
     }
 
     .nav-inner {
         padding: 0 12px;
     }
 
-    /* Hero text over the image, bottom-left */
-    .hero-content {
-        position: absolute;
+    .hero-text {
         bottom: 24px;
         left: 16px;
         right: 16px;
         max-width: none;
-        z-index: 2;
     }
 
     .hero-title {
