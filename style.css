@@ -354,30 +354,27 @@ img { max-width: 100%; display: block; }
     position: relative;
     border-radius: 16px;
     overflow: hidden;
-    /* Hero-specific: flex column to stack header + image, full viewport */
-    display: flex;
-    flex-direction: column;
     height: calc(100vh - 24px);
 }
 
-/* Header inside the card — sticky */
+/* Header inside the card — absolute so it doesn't break border-radius */
 .hero-header {
-    position: sticky;
+    position: absolute;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 10;
     padding: 14px 0;
     background: transparent;
-    flex-shrink: 0;
-    border-radius: 16px 16px 0 0;
 }
 
-/* Same base as .project-img: position relative + overflow hidden */
+/* Hero image fills the entire card, with top padding for the header */
 .hero-image {
     position: relative;
     overflow: hidden;
-    /* Hero-specific: fill remaining card space */
-    flex: 1;
-    min-height: 0;
+    width: 100%;
+    height: 100%;
+    padding-top: 60px;
 }
 
 /* Tiles behind everything */
@@ -404,15 +401,15 @@ img { max-width: 100%; display: block; }
     transform: translateY(0) !important;
 }
 
-/* Gradient overlay */
+/* Gradient overlay — blue electric tint */
 .hero-overlay {
     position: absolute;
     inset: 0;
     background: linear-gradient(
         to top,
         rgba(10, 10, 10, 0.85) 0%,
-        rgba(10, 10, 10, 0.25) 50%,
-        rgba(10, 10, 10, 0.1) 100%
+        rgba(0, 60, 180, 0.15) 50%,
+        rgba(0, 40, 120, 0.1) 100%
     );
     z-index: 1;
     pointer-events: none;
