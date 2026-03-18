@@ -86,7 +86,7 @@ mobileLinks.forEach(link => {
         tile.className = 'hero-tile';
         tile.style.transform = 'translateY(' + offsets[i] + 'px)';
         tile.style.backgroundPosition = ((i / (cols - 1)) * 100) + '% center';
-        tile.style.backgroundSize = (cols * 100) + '% auto';
+        tile.style.backgroundSize = (cols * 100) + '% 100%';
         container.appendChild(tile);
     }
 })();
