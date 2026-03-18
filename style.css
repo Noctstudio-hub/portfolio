@@ -334,19 +334,18 @@ img { max-width: 100%; display: block; }
    HERO
    ============================================ */
 .hero {
-    background: var(--black);
-    margin: 12px;
-    height: calc(100vh - 24px);
+    padding: 12px;
 }
 
-/* The rounded card */
+/* Same base as .project: border-radius + overflow hidden + position relative */
 .hero-card {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
+    position: relative;
     border-radius: 16px;
     overflow: hidden;
+    /* Hero-specific: flex column to stack header + image, full viewport */
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 24px);
 }
 
 /* Header inside the card — sticky */
@@ -359,9 +358,11 @@ img { max-width: 100%; display: block; }
     flex-shrink: 0;
 }
 
-/* Image area fills remaining space */
+/* Same base as .project-img: position relative + overflow hidden */
 .hero-image {
     position: relative;
+    overflow: hidden;
+    /* Hero-specific: fill remaining card space */
     flex: 1;
     min-height: 0;
 }
@@ -402,7 +403,7 @@ img { max-width: 100%; display: block; }
     pointer-events: none;
 }
 
-/* Text over the image — bottom left */
+/* Text over the image — absolute bottom left */
 .hero-text {
     position: absolute;
     bottom: clamp(40px, 6vw, 80px);
@@ -937,7 +938,10 @@ img { max-width: 100%; display: block; }
    ============================================ */
 @media (max-width: 1024px) {
     .hero {
-        margin: 10px;
+        padding: 10px;
+    }
+
+    .hero-card {
         height: calc(100vh - 20px);
     }
 
@@ -966,9 +970,12 @@ img { max-width: 100%; display: block; }
     .nav-links { display: none; }
     .nav-menu { display: flex; margin-left: auto; }
 
-    /* --- Hero mobile --- */
+    /* Hero mobile — same pattern as .project on mobile (keeps radius, adjusts spacing) */
     .hero {
-        margin: 8px;
+        padding: 8px;
+    }
+
+    .hero-card {
         height: calc(100dvh - 16px);
     }
 
