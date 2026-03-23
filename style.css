@@ -132,6 +132,12 @@ img { max-width: 100%; display: block; }
     gap: 24px;
 }
 
+.loader-logo {
+    display: block;
+    width: 60px;
+    height: auto;
+}
+
 .loader-line {
     width: 60px;
     height: 2px;
