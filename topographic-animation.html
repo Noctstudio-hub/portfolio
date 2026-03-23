@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noct Studio — Topographic Animation</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body {
+    width: 100%; height: 100%;
+    background: #08080A;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  canvas {
+    display: block;
+    width: min(100vw, 75vh);
+    height: auto;
+    aspect-ratio: 1080 / 1350;
+  }
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1350"></canvas>
+<script>
+(function () {
+  'use strict';
+
+  var W = 1080, H = 1350;
+  var canvas = document.getElementById('c');
+  var ctx = canvas.getContext('2d');
+
+  // --- Noise (multi-octave sine-based, no lib) ---
+  // We use a custom pseudo-random hash to build a smooth noise field
+
+  function hash(x, y) {
+    var n = Math.sin(x * 127.1 + y * 311.7) * 43758.5453;
+    return n - Math.floor(n);
+  }
+
+  function smoothNoise(x, y) {
+    var ix = Math.floor(x), iy = Math.floor(y);
+    var fx = x - ix, fy = y - iy;
+    // smoothstep
+    var ux = fx * fx * (3 - 2 * fx);
+    var uy = fy * fy * (3 - 2 * fy);
+    var a = hash(ix, iy);
+    var b = hash(ix + 1, iy);
+    var c = hash(ix, iy + 1);
+    var d = hash(ix + 1, iy + 1);
+    return a + (b - a) * ux + (c - a) * uy + (a - b - c + d) * ux * uy;
+  }
+
+  function fbm(x, y, octaves) {
+    var val = 0, amp = 0.5, freq = 1.0, max = 0;
+    for (var i = 0; i < octaves; i++) {
+      val += amp * (smoothNoise(x * freq, y * freq) * 2 - 1);
+      max += amp;
+      amp *= 0.5;
+      freq *= 2.05;
+    }
+    return val / max;
+  }
+
+  // Animated noise field
+  function noiseField(gx, gy, t) {
+    // Multiple sine waves + fbm for organic terrain
+    var nx = gx * 0.035;
+    var ny = gy * 0.035;
+    var v = 0;
+
+    // Base terrain from fbm
+    v += fbm(nx + t * 0.12, ny + t * 0.08, 7) * 0.7;
+
+    // Large slow-moving features
+    v += 0.2 * Math.sin(nx * 1.2 + t * 0.3) * Math.cos(ny * 0.9 + t * 0.2);
+
+    // Medium ridge-like features
+    v += 0.15 * Math.sin(nx * 2.5 + ny * 1.8 + t * 0.15);
+
+    // Small variation
+    v += 0.08 * Math.sin(nx * 4.1 - t * 0.25) * Math.sin(ny * 3.7 + t * 0.18);
+
+    return Math.max(-1, Math.min(1, v));
+  }
+
+  // --- Marching Squares ---
+  var COLS = 100, ROWS = 112;
+  var cellW = W / COLS, cellH = H / ROWS;
+  var NUM_LEVELS = 24;
+
+  // Pre-compute level thresholds
+  var levels = [];
+  for (var i = 0; i < NUM_LEVELS; i++) {
+    levels[i] = -1.0 + (2.0 / (NUM_LEVELS + 1)) * (i + 1);
+  }
+
+  // Linear interpolation for edge crossing
+  function lerp(a, b, t) {
+    return a + (b - a) * t;
+  }
+
+  function marchingSquares(field, threshold, segments) {
+    for (var row = 0; row < ROWS; row++) {
+      var rowOff = row * (COLS + 1);
+      var rowOff1 = (row + 1) * (COLS + 1);
+      for (var col = 0; col < COLS; col++) {
+        var tl = field[rowOff + col];
+        var tr = field[rowOff + col + 1];
+        var br = field[rowOff1 + col + 1];
+        var bl = field[rowOff1 + col];
+
+        var code = 0;
+        if (tl >= threshold) code |= 8;
+        if (tr >= threshold) code |= 4;
+        if (br >= threshold) code |= 2;
+        if (bl >= threshold) code |= 1;
+
+        if (code === 0 || code === 15) continue;
+
+        var x = col * cellW;
+        var y = row * cellH;
+
+        // Edge interpolation values
+        var tTop = (tl === tr) ? 0.5 : (threshold - tl) / (tr - tl);
+        var tRight = (tr === br) ? 0.5 : (threshold - tr) / (br - tr);
+        var tBottom = (bl === br) ? 0.5 : (threshold - bl) / (br - bl);
+        var tLeft = (tl === bl) ? 0.5 : (threshold - tl) / (bl - tl);
+
+        // Edge midpoints
+        var topX = x + tTop * cellW, topY = y;
+        var rightX = x + cellW, rightY = y + tRight * cellH;
+        var bottomX = x + tBottom * cellW, bottomY = y + cellH;
+        var leftX = x, leftY = y + tLeft * cellH;
+
+        // Cases — each case produces 1 or 2 line segments
+        switch (code) {
+          case 1:  segments.push(leftX, leftY, bottomX, bottomY); break;
+          case 2:  segments.push(bottomX, bottomY, rightX, rightY); break;
+          case 3:  segments.push(leftX, leftY, rightX, rightY); break;
+          case 4:  segments.push(topX, topY, rightX, rightY); break;
+          case 5:
+            // Saddle — use average to decide
+            var avg = (tl + tr + br + bl) * 0.25;
+            if (avg >= threshold) {
+              segments.push(topX, topY, leftX, leftY);
+              segments.push(rightX, rightY, bottomX, bottomY);
+            } else {
+              segments.push(topX, topY, rightX, rightY);
+              segments.push(leftX, leftY, bottomX, bottomY);
+            }
+            break;
+          case 6:  segments.push(topX, topY, bottomX, bottomY); break;
+          case 7:  segments.push(topX, topY, leftX, leftY); break;
+          case 8:  segments.push(topX, topY, leftX, leftY); break;
+          case 9:  segments.push(topX, topY, bottomX, bottomY); break;
+          case 10:
+            var avg2 = (tl + tr + br + bl) * 0.25;
+            if (avg2 >= threshold) {
+              segments.push(topX, topY, rightX, rightY);
+              segments.push(leftX, leftY, bottomX, bottomY);
+            } else {
+              segments.push(topX, topY, leftX, leftY);
+              segments.push(rightX, rightY, bottomX, bottomY);
+            }
+            break;
+          case 11: segments.push(topX, topY, rightX, rightY); break;
+          case 12: segments.push(leftX, leftY, rightX, rightY); break;
+          case 13: segments.push(bottomX, bottomY, rightX, rightY); break;
+          case 14: segments.push(leftX, leftY, bottomX, bottomY); break;
+        }
+      }
+    }
+  }
+
+  // --- Perspective projection ---
+  var rotX = 0.4; // rotation around X axis
+  var cosR = Math.cos(rotX), sinR = Math.sin(rotX);
+  var centerX = W * 0.5, centerY = H * 0.5;
+  var perspective = 1800; // distance to camera
+
+  function project(px, py, pz) {
+    // Translate to center
+    var dx = px - centerX;
+    var dy = py - centerY;
+
+    // Rotate around X axis
+    var ry = dy * cosR - pz * sinR;
+    var rz = dy * sinR + pz * cosR;
+
+    // Perspective
+    var scale = perspective / (perspective + rz);
+    return [centerX + dx * scale, centerY + ry * scale];
+  }
+
+  // --- Vignette (pre-rendered) ---
+  var vignetteCanvas = document.createElement('canvas');
+  vignetteCanvas.width = W;
+  vignetteCanvas.height = H;
+  var vctx = vignetteCanvas.getContext('2d');
+  var grad = vctx.createRadialGradient(W * 0.5, H * 0.5, Math.min(W, H) * 0.25, W * 0.5, H * 0.5, Math.max(W, H) * 0.7);
+  grad.addColorStop(0, 'rgba(8,8,10,0)');
+  grad.addColorStop(0.6, 'rgba(8,8,10,0)');
+  grad.addColorStop(1, 'rgba(8,8,10,0.92)');
+  vctx.fillStyle = grad;
+  vctx.fillRect(0, 0, W, H);
+
+  // --- Animation ---
+  var field = new Float32Array((COLS + 1) * (ROWS + 1));
+  var time = 0;
+
+  function frame() {
+    time += 0.003;
+
+    // Clear
+    ctx.fillStyle = '#08080A';
+    ctx.fillRect(0, 0, W, H);
+
+    // Build scalar field
+    for (var row = 0; row <= ROWS; row++) {
+      for (var col = 0; col <= COLS; col++) {
+        field[row * (COLS + 1) + col] = noiseField(col, row, time);
+      }
+    }
+
+    // Draw contour levels
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    for (var li = 0; li < NUM_LEVELS; li++) {
+      var t = (li + 1) / (NUM_LEVELS + 1); // 0..1 normalized height
+      var threshold = levels[li];
+
+      // Opacity and line width based on height
+      var opacity = 0.08 + t * 0.77; // 0.08 to 0.85
+      var lineW = 0.5 + t * 1.8; // 0.5 to 2.3
+
+      // Collect segments
+      var segments = [];
+      marchingSquares(field, threshold, segments);
+
+      if (segments.length === 0) continue;
+
+      // Height for 3D effect — higher levels rise more
+      var elevation = t * 180 - 90; // -90 to 90
+
+      // Set style
+      ctx.strokeStyle = 'rgba(173,255,0,' + opacity.toFixed(3) + ')';
+      ctx.lineWidth = lineW;
+
+      // Glow on crests (top 30% of levels)
+      if (t > 0.7) {
+        var glowIntensity = (t - 0.7) / 0.3;
+        ctx.shadowBlur = 8 * glowIntensity;
+        ctx.shadowColor = 'rgba(173,255,0,' + (0.6 * glowIntensity).toFixed(3) + ')';
+      } else {
+        ctx.shadowBlur = 0;
+        ctx.shadowColor = 'transparent';
+      }
+
+      ctx.beginPath();
+      for (var s = 0; s < segments.length; s += 4) {
+        var p1 = project(segments[s], segments[s + 1], elevation);
+        var p2 = project(segments[s + 2], segments[s + 3], elevation);
+        ctx.moveTo(p1[0], p1[1]);
+        ctx.lineTo(p2[0], p2[1]);
+      }
+      ctx.stroke();
+    }
+
+    // Reset shadow
+    ctx.shadowBlur = 0;
+    ctx.shadowColor = 'transparent';
+
+    // Vignette overlay
+    ctx.drawImage(vignetteCanvas, 0, 0);
+
+    requestAnimationFrame(frame);
+  }
+
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
