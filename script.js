@@ -52,18 +52,20 @@ function setCursor(cls, label) {
     if (cls) {
         follower.classList.add(cls, 'cursor--active');
         cursorLabel.textContent = label;
+        cursor.style.background = cls === 'cursor--violet' ? 'var(--violet)' : 'var(--accent)';
     } else {
         cursorLabel.textContent = '';
+        cursor.style.background = 'var(--accent)';
     }
 }
 
 const cursorZones = [
-    { selector: '.project',                                                    label: 'VIEW →',  cls: 'cursor--view' },
-    { selector: '.nav-link, .nav-mobile-link, .footer-social',                 label: 'GO →',    cls: 'cursor--go'   },
-    { selector: '.nav-logo, .footer-logo',                                     label: 'HOME',    cls: 'cursor--go'   },
-    { selector: 'input, textarea, select',                                     label: 'ÉCRIRE',  cls: 'cursor--type' },
-    { selector: '.btn-submit',                                                 label: 'ENVOYER', cls: 'cursor--violet' },
-    { selector: '.link-arrow',                                                 label: 'VOIR →',  cls: 'cursor--violet' },
+    { selector: '.project',                                                    label: 'VIEW →',  cls: 'cursor--view'   },
+    { selector: '.nav-link, .nav-mobile-link, .footer-social',                 label: 'GO →',    cls: 'cursor--go'     },
+    { selector: '.nav-logo, .footer-logo',                                     label: 'HOME',    cls: 'cursor--go'     },
+    { selector: 'input, textarea, select',                                     label: 'ÉCRIRE',  cls: 'cursor--type'   },
+    { selector: '.btn-submit',                                                 label: 'ENVOYER', cls: 'cursor--violet'  },
+    { selector: '.link-arrow',                                                 label: 'VOIR →',  cls: 'cursor--violet'  },
 ];
 
 cursorZones.forEach(({ selector, label, cls }) => {
