@@ -196,3 +196,46 @@ if (window.innerWidth > 768) {
         });
     });
 }
+
+// ============================================
+// SECTION FLASH TRANSITIONS
+// ============================================
+const flashEl = document.getElementById('flash');
+let flashReady = false;
+let lastActiveSection = null;
+let flashTimeout = null;
+
+// Enable after initial load animations complete
+window.addEventListener('load', () => {
+    setTimeout(() => { flashReady = true; }, 2200);
+});
+
+function triggerFlash() {
+    if (flashTimeout) clearTimeout(flashTimeout);
+
+    // Snap visible instantly (no transition)
+    flashEl.style.transition = 'none';
+    flashEl.style.opacity = '0.22';
+
+    // Next frame: fade out smoothly
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            flashEl.style.transition = 'opacity 0.5s ease-out';
+            flashEl.style.opacity = '0';
+        });
+    });
+
+    flashTimeout = setTimeout(() => { flashTimeout = null; }, 600);
+}
+
+const sectionObserver = new IntersectionObserver((entries) => {
+    if (!flashReady) return;
+    entries.forEach(entry => {
+        if (entry.isIntersecting && entry.target !== lastActiveSection) {
+            lastActiveSection = entry.target;
+            triggerFlash();
+        }
+    });
+}, { threshold: 0.35 });
+
+document.querySelectorAll('section').forEach(s => sectionObserver.observe(s));
