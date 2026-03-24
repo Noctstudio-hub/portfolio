@@ -60,11 +60,17 @@
         </header>
 
         <div class="hero-inner">
-            <h1 class="hero-masked-text" id="heroMasked">
-                <span>NOCT</span>
-                <span>STUDIO</span>
-            </h1>
-            <div class="hero-bottom">
+            <!-- Canvas topo -->
+            <canvas id="topo"></canvas>
+
+            <!-- Masque texte : noir + blanc + multiply = topo visible à travers les lettres -->
+            <div class="mask-layer" id="maskLayer">
+                <span class="hero-title">NOCT</span>
+                <span class="hero-title">STUDIO</span>
+            </div>
+
+            <!-- Infos bas de page -->
+            <div class="hero-bottom" id="heroInfo">
                 <div class="hero-tag" data-animate="fade-up">
                     <span class="hero-tag-dot"></span>
                     Disponible · DM ouvert
@@ -72,6 +78,12 @@
                 <p class="hero-subtitle" data-animate="fade-up">
                     Studio graphique indépendant — Pont-du-Casse
                 </p>
+            </div>
+
+            <!-- Indicateur scroll -->
+            <div class="scroll-hint" id="scrollHint">
+                <span>Scroll</span>
+                <div class="scroll-line"></div>
             </div>
         </div>
     </section>

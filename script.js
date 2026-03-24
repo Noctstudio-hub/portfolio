@@ -101,31 +101,132 @@ mobileLinks.forEach(link => {
 // HERO ANIMATIONS
 // ============================================
 function animateHero() {
-    const masked = document.getElementById('heroMasked');
-    if (masked) masked.classList.add('visible');
-
     const elements = document.querySelectorAll('.hero [data-animate]');
     elements.forEach((el, i) => {
-        setTimeout(() => {
-            el.classList.add('visible');
-        }, 400 + i * 150);
+        setTimeout(() => el.classList.add('visible'), 400 + i * 150);
     });
 }
 
 // ============================================
-// HERO MASKED TEXT — SCROLL THROUGH
+// ANIMATION TOPOGRAPHIQUE
 // ============================================
-const heroMasked = document.getElementById('heroMasked');
-const heroSection = document.getElementById('hero');
+(function initTopo() {
+    const canvas = document.getElementById('topo');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
 
-window.addEventListener('scroll', () => {
-    if (!heroMasked || !heroSection) return;
-    const scrollable = heroSection.offsetHeight - window.innerHeight;
-    const scrolled = Math.max(0, Math.min(scrollable, window.scrollY));
-    const progress = scrolled / scrollable; // 0 → 1
-    const pos = progress * 100; // 0% → 100%
-    heroMasked.style.backgroundPosition = `center ${pos}%`;
-}, { passive: true });
+    function resize() {
+        canvas.width  = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function field(x, y, t) {
+        return (
+            Math.sin(x * 0.008  + t * 0.40) * 0.32 +
+            Math.sin(y * 0.010  + t * 0.28) * 0.24 +
+            Math.sin((x + y) * 0.006 + t * 0.55) * 0.20 +
+            Math.sin((x * 0.7 - y * 0.5) * 0.009 + t * 0.45) * 0.14 +
+            Math.sin((x * 0.4 + y * 0.9) * 0.005 + t * 0.32) * 0.10
+        );
+    }
+
+    const LEVELS = 20;
+    const CELL   = 14;
+
+    function drawTopo(t) {
+        const W    = canvas.width;
+        const H    = canvas.height;
+        const cols = Math.ceil(W / CELL) + 2;
+        const rows = Math.ceil(H / CELL) + 2;
+
+        const g = [];
+        for (let r = 0; r < rows; r++) {
+            g[r] = [];
+            for (let c = 0; c < cols; c++) {
+                g[r][c] = field(c * CELL, r * CELL, t);
+            }
+        }
+
+        ctx.clearRect(0, 0, W, H);
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, W, H);
+
+        for (let lv = 0; lv < LEVELS; lv++) {
+            const thr        = -0.85 + (lv / (LEVELS - 1)) * 1.7;
+            const proximity  = 1 - Math.abs(thr) / 0.85;
+            const alpha      = 0.1 + proximity * 0.65;
+            ctx.strokeStyle  = `rgba(173, 255, 0, ${alpha})`;
+            ctx.lineWidth    = lv % 4 === 0 ? 1.4 : 0.55;
+            ctx.beginPath();
+
+            for (let r = 0; r < rows - 1; r++) {
+                for (let c = 0; c < cols - 1; c++) {
+                    const v00 = g[r][c], v10 = g[r][c+1];
+                    const v01 = g[r+1][c], v11 = g[r+1][c+1];
+                    const idx =
+                        (v00 > thr ? 8 : 0) | (v10 > thr ? 4 : 0) |
+                        (v11 > thr ? 2 : 0) | (v01 > thr ? 1 : 0);
+                    if (idx === 0 || idx === 15) continue;
+
+                    const ox = c * CELL, oy = r * CELL;
+                    const s  = (a, b) => Math.abs(b - a) < 1e-9 ? 0.5 : (thr - a) / (b - a);
+                    const T  = { x: ox + s(v00,v10)*CELL, y: oy };
+                    const R  = { x: ox + CELL,            y: oy + s(v10,v11)*CELL };
+                    const B  = { x: ox + s(v01,v11)*CELL, y: oy + CELL };
+                    const L  = { x: ox,                   y: oy + s(v00,v01)*CELL };
+
+                    const table = {
+                        1:[[L,B]], 2:[[B,R]], 3:[[L,R]], 4:[[R,T]],
+                        5:[[L,T],[R,B]], 6:[[B,T]], 7:[[L,T]], 8:[[T,L]],
+                        9:[[T,B]], 10:[[T,R],[B,L]], 11:[[T,R]], 12:[[R,L]],
+                        13:[[R,B]], 14:[[B,L]]
+                    };
+                    for (const [a, b] of (table[idx] || [])) {
+                        ctx.moveTo(a.x, a.y);
+                        ctx.lineTo(b.x, b.y);
+                    }
+                }
+            }
+            ctx.stroke();
+        }
+    }
+
+    let time = 0;
+    function loop() { time += 0.007; drawTopo(time); requestAnimationFrame(loop); }
+    loop();
+})();
+
+// ============================================
+// HERO SCROLL ZOOM — entrée dans le texte
+// ============================================
+const maskLayer  = document.getElementById('maskLayer');
+const heroInfo   = document.getElementById('heroInfo');
+const scrollHint = document.getElementById('scrollHint');
+const heroEl     = document.getElementById('hero');
+
+let currentScale = 1;
+let targetScale  = 1;
+
+function onHeroScroll() {
+    if (!heroEl) return;
+    const total    = heroEl.offsetHeight - window.innerHeight;
+    const progress = Math.min(1, Math.max(0, window.scrollY / total));
+    targetScale    = 1 + progress * 6;
+    const fade     = Math.max(0, 1 - progress * 4);
+    if (heroInfo)   heroInfo.style.opacity   = fade;
+    if (scrollHint) scrollHint.style.opacity = fade;
+}
+
+function zoomLoop() {
+    currentScale += (targetScale - currentScale) * 0.08;
+    if (maskLayer) maskLayer.style.transform = `scale(${currentScale})`;
+    requestAnimationFrame(zoomLoop);
+}
+
+window.addEventListener('scroll', onHeroScroll, { passive: true });
+zoomLoop();
 
 // ============================================
 // SCROLL REVEAL
