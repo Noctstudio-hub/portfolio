@@ -1016,19 +1016,6 @@ img { max-width: 100%; display: block; }
 }
 
 /* ============================================
-   SECTION FLASH TRANSITIONS
-   ============================================ */
-#flash {
-    position: fixed;
-    inset: 0;
-    background: #ffffff;
-    opacity: 0;
-    pointer-events: none;
-    z-index: 9997;
-    will-change: opacity;
-}
-
-/* ============================================
    SCROLL ANIMATIONS
    ============================================ */
 [data-animate] {
