@@ -144,6 +144,17 @@ img { max-width: 100%; display: block; }
     background: rgba(173, 255, 0, 0.04);
 }
 
+.cursor-follower.cursor--violet {
+    width: 88px;
+    height: 88px;
+    border-color: var(--violet);
+    background: rgba(123, 47, 255, 0.06);
+}
+
+.cursor-follower.cursor--violet #cursorLabel {
+    color: var(--violet);
+}
+
 /* ============================================
    LOADER
    ============================================ */

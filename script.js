@@ -45,7 +45,7 @@ animateFollower();
 
 // Contextual cursor
 const cursorLabel = document.getElementById('cursorLabel');
-const cursorClasses = ['cursor--view', 'cursor--go', 'cursor--type', 'cursor--active'];
+const cursorClasses = ['cursor--view', 'cursor--go', 'cursor--type', 'cursor--violet', 'cursor--active'];
 
 function setCursor(cls, label) {
     follower.classList.remove(...cursorClasses);
@@ -59,10 +59,11 @@ function setCursor(cls, label) {
 
 const cursorZones = [
     { selector: '.project',                                                    label: 'VIEW →',  cls: 'cursor--view' },
-    { selector: '.nav-link, .nav-mobile-link, .footer-social, .link-arrow',   label: 'GO →',    cls: 'cursor--go'   },
+    { selector: '.nav-link, .nav-mobile-link, .footer-social',                 label: 'GO →',    cls: 'cursor--go'   },
     { selector: '.nav-logo, .footer-logo',                                     label: 'HOME',    cls: 'cursor--go'   },
     { selector: 'input, textarea, select',                                     label: 'ÉCRIRE',  cls: 'cursor--type' },
-    { selector: '.btn-submit',                                                 label: 'ENVOYER', cls: 'cursor--view' },
+    { selector: '.btn-submit',                                                 label: 'ENVOYER', cls: 'cursor--violet' },
+    { selector: '.link-arrow',                                                 label: 'VOIR →',  cls: 'cursor--violet' },
 ];
 
 cursorZones.forEach(({ selector, label, cls }) => {
