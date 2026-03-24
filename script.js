@@ -53,9 +53,11 @@ function setCursor(cls, label) {
         follower.classList.add(cls, 'cursor--active');
         cursorLabel.textContent = label;
         cursor.style.background = cls === 'cursor--violet' ? 'var(--violet)' : 'var(--accent)';
+        cursor.style.mixBlendMode = cls === 'cursor--violet' ? 'normal' : 'difference';
     } else {
         cursorLabel.textContent = '';
         cursor.style.background = 'var(--accent)';
+        cursor.style.mixBlendMode = 'difference';
     }
 }
 
