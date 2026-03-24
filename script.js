@@ -108,25 +108,30 @@ function animateHero() {
 }
 
 // ============================================
-// ANIMATION TOPOGRAPHIQUE
+// HERO — TOPO + TEXT MASK (canvas compositing)
 // ============================================
-(function initTopo() {
+(function initHero() {
     const canvas = document.getElementById('topo');
     if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    const ctx  = canvas.getContext('2d');
+    const heroEl     = document.getElementById('hero');
+    const heroInfo   = document.getElementById('heroInfo');
+    const scrollHint = document.getElementById('scrollHint');
 
+    let W, H;
     function resize() {
-        canvas.width  = window.innerWidth;
-        canvas.height = window.innerHeight;
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
     }
     resize();
     window.addEventListener('resize', resize);
 
+    // — Champ de hauteur topo —
     function field(x, y, t) {
         return (
             Math.sin(x * 0.008  + t * 0.40) * 0.32 +
             Math.sin(y * 0.010  + t * 0.28) * 0.24 +
-            Math.sin((x + y) * 0.006 + t * 0.55) * 0.20 +
+            Math.sin((x + y)    * 0.006 + t * 0.55) * 0.20 +
             Math.sin((x * 0.7 - y * 0.5) * 0.009 + t * 0.45) * 0.14 +
             Math.sin((x * 0.4 + y * 0.9) * 0.005 + t * 0.32) * 0.10
         );
@@ -135,98 +140,89 @@ function animateHero() {
     const LEVELS = 20;
     const CELL   = 14;
 
-    function drawTopo(t) {
-        const W    = canvas.width;
-        const H    = canvas.height;
+    function drawTopoLines(t) {
         const cols = Math.ceil(W / CELL) + 2;
         const rows = Math.ceil(H / CELL) + 2;
-
         const g = [];
         for (let r = 0; r < rows; r++) {
             g[r] = [];
-            for (let c = 0; c < cols; c++) {
-                g[r][c] = field(c * CELL, r * CELL, t);
-            }
+            for (let c = 0; c < cols; c++) g[r][c] = field(c * CELL, r * CELL, t);
         }
-
-        ctx.clearRect(0, 0, W, H);
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, W, H);
-
         for (let lv = 0; lv < LEVELS; lv++) {
-            const thr        = -0.85 + (lv / (LEVELS - 1)) * 1.7;
-            const proximity  = 1 - Math.abs(thr) / 0.85;
-            const alpha      = 0.1 + proximity * 0.65;
-            ctx.strokeStyle  = `rgba(173, 255, 0, ${alpha})`;
-            ctx.lineWidth    = lv % 4 === 0 ? 1.4 : 0.55;
+            const thr   = -0.85 + (lv / (LEVELS - 1)) * 1.7;
+            const prox  = 1 - Math.abs(thr) / 0.85;
+            ctx.strokeStyle = `rgba(173,255,0,${0.1 + prox * 0.65})`;
+            ctx.lineWidth   = lv % 4 === 0 ? 1.4 : 0.55;
             ctx.beginPath();
-
             for (let r = 0; r < rows - 1; r++) {
                 for (let c = 0; c < cols - 1; c++) {
-                    const v00 = g[r][c], v10 = g[r][c+1];
-                    const v01 = g[r+1][c], v11 = g[r+1][c+1];
-                    const idx =
-                        (v00 > thr ? 8 : 0) | (v10 > thr ? 4 : 0) |
-                        (v11 > thr ? 2 : 0) | (v01 > thr ? 1 : 0);
-                    if (idx === 0 || idx === 15) continue;
-
-                    const ox = c * CELL, oy = r * CELL;
-                    const s  = (a, b) => Math.abs(b - a) < 1e-9 ? 0.5 : (thr - a) / (b - a);
-                    const T  = { x: ox + s(v00,v10)*CELL, y: oy };
-                    const R  = { x: ox + CELL,            y: oy + s(v10,v11)*CELL };
-                    const B  = { x: ox + s(v01,v11)*CELL, y: oy + CELL };
-                    const L  = { x: ox,                   y: oy + s(v00,v01)*CELL };
-
-                    const table = {
-                        1:[[L,B]], 2:[[B,R]], 3:[[L,R]], 4:[[R,T]],
-                        5:[[L,T],[R,B]], 6:[[B,T]], 7:[[L,T]], 8:[[T,L]],
-                        9:[[T,B]], 10:[[T,R],[B,L]], 11:[[T,R]], 12:[[R,L]],
-                        13:[[R,B]], 14:[[B,L]]
-                    };
-                    for (const [a, b] of (table[idx] || [])) {
-                        ctx.moveTo(a.x, a.y);
-                        ctx.lineTo(b.x, b.y);
-                    }
+                    const v00=g[r][c], v10=g[r][c+1], v01=g[r+1][c], v11=g[r+1][c+1];
+                    const idx = (v00>thr?8:0)|(v10>thr?4:0)|(v11>thr?2:0)|(v01>thr?1:0);
+                    if (idx===0||idx===15) continue;
+                    const ox=c*CELL, oy=r*CELL;
+                    const s=(a,b)=>Math.abs(b-a)<1e-9?0.5:(thr-a)/(b-a);
+                    const T={x:ox+s(v00,v10)*CELL,y:oy}, R={x:ox+CELL,y:oy+s(v10,v11)*CELL};
+                    const B={x:ox+s(v01,v11)*CELL,y:oy+CELL}, L={x:ox,y:oy+s(v00,v01)*CELL};
+                    const tbl={1:[[L,B]],2:[[B,R]],3:[[L,R]],4:[[R,T]],5:[[L,T],[R,B]],
+                        6:[[B,T]],7:[[L,T]],8:[[T,L]],9:[[T,B]],10:[[T,R],[B,L]],
+                        11:[[T,R]],12:[[R,L]],13:[[R,B]],14:[[B,L]]};
+                    for (const [a,b] of (tbl[idx]||[])) { ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); }
                 }
             }
             ctx.stroke();
         }
     }
 
+    // — Scroll progress —
+    let scrollProgress = 0;
+
+    window.addEventListener('scroll', () => {
+        if (!heroEl) return;
+        const total = heroEl.offsetHeight - window.innerHeight;
+        scrollProgress = Math.min(1, Math.max(0, window.scrollY / total));
+        const fade = Math.max(0, 1 - scrollProgress * 4);
+        if (heroInfo)   heroInfo.style.opacity   = fade;
+        if (scrollHint) scrollHint.style.opacity = fade;
+    }, { passive: true });
+
+    // — Boucle principale —
     let time = 0;
-    function loop() { time += 0.007; drawTopo(time); requestAnimationFrame(loop); }
-    loop();
+    let fontReady = false;
+    document.fonts.ready.then(() => { fontReady = true; });
+
+    function frame() {
+        time += 0.007;
+        ctx.clearRect(0, 0, W, H);
+
+        // 1. Dessiner la topo
+        drawTopoLines(time);
+
+        // 2. Masquer avec le texte (destination-in = garde seulement là où le texte est dessiné)
+        const fontSize = Math.min(W * 0.27, H * 0.42) * (1 + scrollProgress * 6);
+        const font = fontReady
+            ? `900 ${fontSize}px "Barlow Condensed", Impact, sans-serif`
+            : `900 ${fontSize}px Impact, sans-serif`;
+
+        ctx.globalCompositeOperation = 'destination-in';
+        ctx.fillStyle    = '#fff';
+        ctx.font         = font;
+        ctx.textAlign    = 'center';
+        ctx.textBaseline = 'alphabetic';
+        const gap   = fontSize * 0.06;
+        const lineH = fontSize * 0.88;
+        ctx.fillText('NOCT',   W / 2, H / 2 - gap);
+        ctx.fillText('STUDIO', W / 2, H / 2 + lineH + gap);
+
+        // 3. Fond noir derrière (destination-over = derrière les pixels existants)
+        ctx.globalCompositeOperation = 'destination-over';
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, W, H);
+
+        ctx.globalCompositeOperation = 'source-over';
+        requestAnimationFrame(frame);
+    }
+    frame();
 })();
-
-// ============================================
-// HERO SCROLL ZOOM — entrée dans le texte
-// ============================================
-const maskLayer  = document.getElementById('maskLayer');
-const heroInfo   = document.getElementById('heroInfo');
-const scrollHint = document.getElementById('scrollHint');
-const heroEl     = document.getElementById('hero');
-
-let currentScale = 1;
-let targetScale  = 1;
-
-function onHeroScroll() {
-    if (!heroEl) return;
-    const total    = heroEl.offsetHeight - window.innerHeight;
-    const progress = Math.min(1, Math.max(0, window.scrollY / total));
-    targetScale    = 1 + progress * 6;
-    const fade     = Math.max(0, 1 - progress * 4);
-    if (heroInfo)   heroInfo.style.opacity   = fade;
-    if (scrollHint) scrollHint.style.opacity = fade;
-}
-
-function zoomLoop() {
-    currentScale += (targetScale - currentScale) * 0.08;
-    if (maskLayer) maskLayer.style.transform = `scale(${currentScale})`;
-    requestAnimationFrame(zoomLoop);
-}
-
-window.addEventListener('scroll', onHeroScroll, { passive: true });
-zoomLoop();
 
 // ============================================
 // SCROLL REVEAL
