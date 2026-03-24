@@ -146,6 +146,11 @@ function animateHero() {
         'l0,474.725c-503.691,0 -911.709,-406.702 -911.709,-906.509l474.725,0Z'
     );
 
+    const logoPath = new Path2D();
+    logoPath.addPath(logoRect1);
+    logoPath.addPath(logoRect2);
+    logoPath.addPath(logoCurve);
+
     // — Champ de hauteur topo —
     function field(x, y, t) {
         return (
@@ -211,30 +216,22 @@ function animateHero() {
         time += 0.007;
         ctx.clearRect(0, 0, W, H);
 
-        // 1. Topo
-        drawTopoLines(time);
+        // 1. Fond noir
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, W, H);
 
-        // 2. Masque logo : scale de 0.5 → 3.5 selon scroll
+        // 3. Masque logo : clip + topo à l'intérieur
         const baseScale = Math.min(W / LOGO_W, H / LOGO_H) * 0.65;
         const scale     = baseScale * (1 + scrollProgress * 5);
         const tx        = W / 2 - LOGO_CX * scale;
         const ty        = H / 2 - LOGO_CY * scale;
 
-        ctx.globalCompositeOperation = 'destination-in';
         ctx.save();
         ctx.setTransform(scale, 0, 0, scale, tx, ty);
-        ctx.fillStyle = '#fff';
-        ctx.fill(logoRect1);
-        ctx.fill(logoRect2);
-        ctx.fill(logoCurve);
+        ctx.clip(logoPath);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        drawTopoLines(time);
         ctx.restore();
-
-        // 3. Fond noir derrière
-        ctx.globalCompositeOperation = 'destination-over';
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, W, H);
-
-        ctx.globalCompositeOperation = 'source-over';
         requestAnimationFrame(frame);
     }
     frame();
