@@ -113,14 +113,18 @@ function animateHero() {
 }
 
 // ============================================
-// HERO MASKED TEXT — SCROLL PARALLAX
+// HERO MASKED TEXT — SCROLL THROUGH
 // ============================================
 const heroMasked = document.getElementById('heroMasked');
+const heroSection = document.getElementById('hero');
 
 window.addEventListener('scroll', () => {
-    if (!heroMasked) return;
-    const scrollY = window.scrollY;
-    heroMasked.style.backgroundPosition = `center calc(50% + ${scrollY * 0.25}px)`;
+    if (!heroMasked || !heroSection) return;
+    const scrollable = heroSection.offsetHeight - window.innerHeight;
+    const scrolled = Math.max(0, Math.min(scrollable, window.scrollY));
+    const progress = scrolled / scrollable; // 0 → 1
+    const pos = progress * 100; // 0% → 100%
+    heroMasked.style.backgroundPosition = `center ${pos}%`;
 }, { passive: true });
 
 // ============================================
