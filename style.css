@@ -592,11 +592,25 @@ img { max-width: 100%; display: block; }
     border-radius: 2px;
     overflow: hidden;
     position: relative;
-    transition: transform 0.5s var(--ease);
+    transition: opacity 0.4s var(--ease), filter 0.4s var(--ease), transform 0.5s var(--ease), box-shadow 0.5s var(--ease), outline-color 0.3s var(--ease);
+    outline: 1px solid transparent;
+    z-index: 0;
 }
 
-.project:hover {
-    transform: translateY(-4px);
+/* Invasion : les autres projets s'effacent */
+.projects-grid:has(.project:hover) .project {
+    opacity: 0.2;
+    filter: grayscale(0.4);
+}
+
+/* Le projet survolé impose sa présence */
+.projects-grid:has(.project:hover) .project:hover {
+    opacity: 1;
+    filter: none;
+    transform: scale(1.02);
+    outline-color: var(--accent);
+    box-shadow: 0 0 60px rgba(173, 255, 0, 0.12), 0 24px 80px rgba(0, 0, 0, 0.6);
+    z-index: 2;
 }
 
 .project-wide {
@@ -614,7 +628,7 @@ img { max-width: 100%; display: block; }
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.8s var(--ease);
+    transition: transform 0.7s var(--ease);
 }
 
 .project-wide .project-img-inner {
@@ -622,7 +636,7 @@ img { max-width: 100%; display: block; }
 }
 
 .project:hover .project-img-inner {
-    transform: scale(1.03);
+    transform: scale(1.08);
 }
 
 .project-img-label {
@@ -631,6 +645,11 @@ img { max-width: 100%; display: block; }
     font-weight: 900;
     color: rgba(173, 255, 0, 0.08);
     user-select: none;
+    transition: color 0.4s var(--ease);
+}
+
+.project:hover .project-img-label {
+    color: rgba(173, 255, 0, 0.18);
 }
 
 .project-info {
