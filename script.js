@@ -43,11 +43,33 @@ function animateFollower() {
 }
 animateFollower();
 
-// Hover effect on interactive elements
-const hoverElements = document.querySelectorAll('a, button, input, textarea, select, .project');
-hoverElements.forEach(el => {
-    el.addEventListener('mouseenter', () => follower.classList.add('hovering'));
-    el.addEventListener('mouseleave', () => follower.classList.remove('hovering'));
+// Contextual cursor
+const cursorLabel = document.getElementById('cursorLabel');
+const cursorClasses = ['cursor--view', 'cursor--go', 'cursor--type', 'cursor--active'];
+
+function setCursor(cls, label) {
+    follower.classList.remove(...cursorClasses);
+    if (cls) {
+        follower.classList.add(cls, 'cursor--active');
+        cursorLabel.textContent = label;
+    } else {
+        cursorLabel.textContent = '';
+    }
+}
+
+const cursorZones = [
+    { selector: '.project',                                                    label: 'VIEW →',  cls: 'cursor--view' },
+    { selector: '.nav-link, .nav-mobile-link, .footer-social, .link-arrow',   label: 'GO →',    cls: 'cursor--go'   },
+    { selector: '.nav-logo, .footer-logo',                                     label: 'HOME',    cls: 'cursor--go'   },
+    { selector: 'input, textarea, select',                                     label: 'ÉCRIRE',  cls: 'cursor--type' },
+    { selector: '.btn-submit',                                                 label: 'ENVOYER', cls: 'cursor--view' },
+];
+
+cursorZones.forEach(({ selector, label, cls }) => {
+    document.querySelectorAll(selector).forEach(el => {
+        el.addEventListener('mouseenter', () => setCursor(cls, label));
+        el.addEventListener('mouseleave', () => setCursor(null, ''));
+    });
 });
 
 // ============================================
