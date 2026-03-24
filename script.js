@@ -108,12 +108,12 @@ function animateHero() {
 }
 
 // ============================================
-// HERO — TOPO + TEXT MASK (canvas compositing)
+// HERO — TOPO + LOGO SVG MASK (canvas compositing)
 // ============================================
 (function initHero() {
     const canvas = document.getElementById('topo');
     if (!canvas) return;
-    const ctx  = canvas.getContext('2d');
+    const ctx        = canvas.getContext('2d');
     const heroEl     = document.getElementById('hero');
     const heroInfo   = document.getElementById('heroInfo');
     const scrollHint = document.getElementById('scrollHint');
@@ -125,6 +125,26 @@ function animateHero() {
     }
     resize();
     window.addEventListener('resize', resize);
+
+    // — Logo SVG (viewBox 900 750 1700 1000) —
+    // Bounding box du contenu : x=947→2560, y=785→1695
+    const LOGO_X  = 947.266;
+    const LOGO_Y  = 785.229;
+    const LOGO_W  = 1613.342; // 2560.608 - 947.266
+    const LOGO_H  = 909.858;  // 1695.087 - 785.229
+    const LOGO_CX = LOGO_X + LOGO_W / 2; // 1753.937
+    const LOGO_CY = LOGO_Y + LOGO_H / 2; // 1240.158
+
+    const logoRect1 = new Path2D();
+    logoRect1.rect(947.266, 785.229, 455.854, 909.858);
+
+    const logoRect2 = new Path2D();
+    logoRect2.rect(2312.851, 785.229, 247.757, 247.757);
+
+    const logoCurve = new Path2D(
+        'M1875.868,785.229c0,238.817 196.310,431.783 436.983,431.783' +
+        'l0,474.725c-503.691,0 -911.709,-406.702 -911.709,-906.509l474.725,0Z'
+    );
 
     // — Champ de hauteur topo —
     function field(x, y, t) {
@@ -149,15 +169,15 @@ function animateHero() {
             for (let c = 0; c < cols; c++) g[r][c] = field(c * CELL, r * CELL, t);
         }
         for (let lv = 0; lv < LEVELS; lv++) {
-            const thr   = -0.85 + (lv / (LEVELS - 1)) * 1.7;
-            const prox  = 1 - Math.abs(thr) / 0.85;
+            const thr  = -0.85 + (lv / (LEVELS - 1)) * 1.7;
+            const prox = 1 - Math.abs(thr) / 0.85;
             ctx.strokeStyle = `rgba(173,255,0,${0.1 + prox * 0.65})`;
             ctx.lineWidth   = lv % 4 === 0 ? 1.4 : 0.55;
             ctx.beginPath();
             for (let r = 0; r < rows - 1; r++) {
                 for (let c = 0; c < cols - 1; c++) {
                     const v00=g[r][c], v10=g[r][c+1], v01=g[r+1][c], v11=g[r+1][c+1];
-                    const idx = (v00>thr?8:0)|(v10>thr?4:0)|(v11>thr?2:0)|(v01>thr?1:0);
+                    const idx=(v00>thr?8:0)|(v10>thr?4:0)|(v11>thr?2:0)|(v01>thr?1:0);
                     if (idx===0||idx===15) continue;
                     const ox=c*CELL, oy=r*CELL;
                     const s=(a,b)=>Math.abs(b-a)<1e-9?0.5:(thr-a)/(b-a);
@@ -173,9 +193,8 @@ function animateHero() {
         }
     }
 
-    // — Scroll progress —
+    // — Scroll —
     let scrollProgress = 0;
-
     window.addEventListener('scroll', () => {
         if (!heroEl) return;
         const total = heroEl.offsetHeight - window.innerHeight;
@@ -185,35 +204,32 @@ function animateHero() {
         if (scrollHint) scrollHint.style.opacity = fade;
     }, { passive: true });
 
-    // — Boucle principale —
+    // — Boucle —
     let time = 0;
-    let fontReady = false;
-    document.fonts.ready.then(() => { fontReady = true; });
 
     function frame() {
         time += 0.007;
         ctx.clearRect(0, 0, W, H);
 
-        // 1. Dessiner la topo
+        // 1. Topo
         drawTopoLines(time);
 
-        // 2. Masquer avec le texte (destination-in = garde seulement là où le texte est dessiné)
-        const fontSize = Math.min(W * 0.27, H * 0.42) * (1 + scrollProgress * 6);
-        const font = fontReady
-            ? `900 ${fontSize}px "Barlow Condensed", Impact, sans-serif`
-            : `900 ${fontSize}px Impact, sans-serif`;
+        // 2. Masque logo : scale de 0.5 → 3.5 selon scroll
+        const baseScale = Math.min(W / LOGO_W, H / LOGO_H) * 0.65;
+        const scale     = baseScale * (1 + scrollProgress * 5);
+        const tx        = W / 2 - LOGO_CX * scale;
+        const ty        = H / 2 - LOGO_CY * scale;
 
         ctx.globalCompositeOperation = 'destination-in';
-        ctx.fillStyle    = '#fff';
-        ctx.font         = font;
-        ctx.textAlign    = 'center';
-        ctx.textBaseline = 'alphabetic';
-        const gap   = fontSize * 0.06;
-        const lineH = fontSize * 0.88;
-        ctx.fillText('NOCT',   W / 2, H / 2 - gap);
-        ctx.fillText('STUDIO', W / 2, H / 2 + lineH + gap);
+        ctx.save();
+        ctx.setTransform(scale, 0, 0, scale, tx, ty);
+        ctx.fillStyle = '#fff';
+        ctx.fill(logoRect1);
+        ctx.fill(logoRect2);
+        ctx.fill(logoCurve);
+        ctx.restore();
 
-        // 3. Fond noir derrière (destination-over = derrière les pixels existants)
+        // 3. Fond noir derrière
         ctx.globalCompositeOperation = 'destination-over';
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, W, H);
