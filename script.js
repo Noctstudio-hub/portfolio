@@ -98,45 +98,30 @@ mobileLinks.forEach(link => {
 });
 
 // ============================================
-// HERO TILES
-// ============================================
-(function buildHeroTiles() {
-    const container = document.getElementById('heroTiles');
-    if (!container) return;
-
-    const cols = 7;
-    // Staggered starting offsets — larger = arrives from further down
-    const offsets = [150, 280, 100, 250, 130, 300, 180];
-
-    for (let i = 0; i < cols; i++) {
-        const tile = document.createElement('div');
-        tile.className = 'hero-tile';
-        tile.style.transform = 'translateY(' + offsets[i] + 'px)';
-        tile.style.backgroundPosition = ((i / (cols - 1)) * 100) + '% center';
-        tile.style.backgroundSize = (cols * 100) + '% 100%';
-        container.appendChild(tile);
-    }
-})();
-
-// ============================================
 // HERO ANIMATIONS
 // ============================================
 function animateHero() {
-    const tiles = document.querySelectorAll('.hero-tile');
-    tiles.forEach((tile, i) => {
-        setTimeout(() => {
-            tile.classList.add('visible');
-        }, i * 100);
-    });
+    const masked = document.getElementById('heroMasked');
+    if (masked) masked.classList.add('visible');
 
-    const textDelay = tiles.length * 100 + 200;
     const elements = document.querySelectorAll('.hero [data-animate]');
     elements.forEach((el, i) => {
         setTimeout(() => {
             el.classList.add('visible');
-        }, textDelay + i * 120);
+        }, 400 + i * 150);
     });
 }
+
+// ============================================
+// HERO MASKED TEXT — SCROLL PARALLAX
+// ============================================
+const heroMasked = document.getElementById('heroMasked');
+
+window.addEventListener('scroll', () => {
+    if (!heroMasked) return;
+    const scrollY = window.scrollY;
+    heroMasked.style.backgroundPosition = `center calc(50% + ${scrollY * 0.25}px)`;
+}, { passive: true });
 
 // ============================================
 // SCROLL REVEAL

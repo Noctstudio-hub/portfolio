@@ -27,61 +27,51 @@
 
     <!-- Hero -->
     <section class="hero" id="hero">
-        <div class="hero-card">
-            <!-- Header INSIDE the card (Sonido pattern) -->
-            <header class="hero-header" id="nav">
-                <div class="nav-inner">
-                    <!-- Left: logo + desktop links -->
-                    <div class="navbar-left" data-nav-anim>
-                        <a href="#" class="nav-logo">
-                            <svg class="nav-logo-svg" viewBox="900 750 1700 1000" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="947.266" y="785.229" width="455.854" height="909.858" fill="#ADFF00"/>
-                                <rect x="2312.851" y="785.229" width="247.757" height="247.757" fill="#ADFF00"/>
-                                <path d="M1875.868,785.229c0,238.817 196.310,431.783 436.983,431.783l0,474.725c-503.691,0 -911.709,-406.702 -911.709,-906.509l474.725,0Z" fill="#ADFF00"/>
-                            </svg>
-                        </a>
-                        <ul class="nav-links">
-                            <li><a href="#hero" class="nav-link" data-nav-anim>Accueil</a></li>
-                            <li><a href="#about" class="nav-link" data-nav-anim>Studio</a></li>
-                            <li><a href="#work" class="nav-link" data-nav-anim>Projets</a></li>
-                            <li><a href="#services" class="nav-link" data-nav-anim>Services</a></li>
-                        </ul>
-                    </div>
-                    <!-- Right: burger (mobile only) -->
-                    <div class="mobile-content" data-nav-anim>
-                        <button class="nav-menu" id="navMenu" aria-label="Menu">
-                            <span class="nav-menu-line"></span>
-                            <span class="nav-menu-line"></span>
-                        </button>
-                    </div>
+        <header class="hero-header" id="nav">
+            <div class="nav-inner">
+                <div class="navbar-left" data-nav-anim>
+                    <a href="#" class="nav-logo">
+                        <svg class="nav-logo-svg" viewBox="900 750 1700 1000" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="947.266" y="785.229" width="455.854" height="909.858" fill="#ADFF00"/>
+                            <rect x="2312.851" y="785.229" width="247.757" height="247.757" fill="#ADFF00"/>
+                            <path d="M1875.868,785.229c0,238.817 196.310,431.783 436.983,431.783l0,474.725c-503.691,0 -911.709,-406.702 -911.709,-906.509l474.725,0Z" fill="#ADFF00"/>
+                        </svg>
+                    </a>
+                    <ul class="nav-links">
+                        <li><a href="#hero" class="nav-link" data-nav-anim>Accueil</a></li>
+                        <li><a href="#about" class="nav-link" data-nav-anim>Studio</a></li>
+                        <li><a href="#work" class="nav-link" data-nav-anim>Projets</a></li>
+                        <li><a href="#services" class="nav-link" data-nav-anim>Services</a></li>
+                    </ul>
                 </div>
-                <!-- Mobile dropdown nav (duplicate links — Sonido pattern) -->
-                <nav class="nav-mobile" id="navMobile">
-                    <a href="#hero" class="nav-mobile-link">Accueil</a>
-                    <a href="#about" class="nav-mobile-link">Studio</a>
-                    <a href="#work" class="nav-mobile-link">Projets</a>
-                    <a href="#services" class="nav-mobile-link">Services</a>
-                </nav>
-            </header>
-            <!-- Image area filling the card -->
-            <div class="hero-image">
-                <div class="hero-tiles" id="heroTiles"></div>
-                <div class="hero-overlay"></div>
-                <!-- Text over the image -->
-                <div class="hero-text">
-                    <div class="hero-tag" data-animate="fade-up">
-                        <span class="hero-tag-dot"></span>
-                        Disponible · DM ouvert
-                    </div>
-                    <h1 class="hero-title" data-animate="fade-up" data-delay="1">
-                        Nous concevons des<br>
-                        <em>systèmes visuels</em> qui ne<br>
-                        ressemblent à <em>rien d'autre</em>
-                    </h1>
-                    <p class="hero-subtitle" data-animate="fade-up" data-delay="2">
-                        Studio graphique indépendant — Pont-du-Casse
-                    </p>
+                <div class="mobile-content" data-nav-anim>
+                    <button class="nav-menu" id="navMenu" aria-label="Menu">
+                        <span class="nav-menu-line"></span>
+                        <span class="nav-menu-line"></span>
+                    </button>
                 </div>
+            </div>
+            <nav class="nav-mobile" id="navMobile">
+                <a href="#hero" class="nav-mobile-link">Accueil</a>
+                <a href="#about" class="nav-mobile-link">Studio</a>
+                <a href="#work" class="nav-mobile-link">Projets</a>
+                <a href="#services" class="nav-mobile-link">Services</a>
+            </nav>
+        </header>
+
+        <div class="hero-inner">
+            <h1 class="hero-masked-text" id="heroMasked">
+                <span>NOCT</span>
+                <span>STUDIO</span>
+            </h1>
+            <div class="hero-bottom">
+                <div class="hero-tag" data-animate="fade-up">
+                    <span class="hero-tag-dot"></span>
+                    Disponible · DM ouvert
+                </div>
+                <p class="hero-subtitle" data-animate="fade-up">
+                    Studio graphique indépendant — Pont-du-Casse
+                </p>
             </div>
         </div>
     </section>
