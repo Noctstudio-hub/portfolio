@@ -81,6 +81,16 @@ cursorZones.forEach(({ selector, label, cls }) => {
 // NAVIGATION (Sonido pattern — dropdown menu)
 // ============================================
 const nav = document.getElementById('nav');
+
+// Nav backdrop blur on scroll
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+        nav.classList.add('nav-scrolled');
+    } else {
+        nav.classList.remove('nav-scrolled');
+    }
+}, { passive: true });
+
 const navMenu = document.getElementById('navMenu');
 const navMobile = document.getElementById('navMobile');
 const mobileLinks = document.querySelectorAll('.nav-mobile-link');
@@ -212,28 +222,25 @@ function animateHero() {
     // — Boucle —
     let time = 0;
 
+    // — Zoom SVG logo on scroll —
+    const heroLogoSvg = document.getElementById('heroLogoSvg');
+
     function frame() {
         time += 0.007;
 
-        // 1. Fond noir
+        // Fond noir
         ctx.clearRect(0, 0, W, H);
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, W, H);
 
-        // 2. Clip logo : transformer le path en coords écran
-        const baseScale = Math.min(W / LOGO_W, H / LOGO_H) * 0.65;
-        const scale     = baseScale * (1 + scrollProgress * 5);
-        const tx        = W / 2 - LOGO_CX * scale;
-        const ty        = H / 2 - LOGO_CY * scale;
-
-        const m = new DOMMatrix([scale, 0, 0, scale, tx, ty]);
-        const clipPath = new Path2D();
-        clipPath.addPath(logoPath, m);
-
-        ctx.save();
-        ctx.clip(clipPath);
+        // Topo plein écran, sans masque
         drawTopoLines(time);
-        ctx.restore();
+
+        // Zoom logo SVG selon scroll
+        if (heroLogoSvg) {
+            const logoScale = 1 + scrollProgress * 0.5;
+            heroLogoSvg.style.transform = `translate(-50%, -50%) scale(${logoScale})`;
+        }
 
         requestAnimationFrame(frame);
     }
