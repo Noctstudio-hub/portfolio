@@ -4,8 +4,6 @@
 if ('scrollRestoration' in history) {
     history.scrollRestoration = 'manual';
 }
-window.scrollTo(0, 0);
-document.addEventListener('DOMContentLoaded', () => window.scrollTo(0, 0));
 
 // ============================================
 // LOADER
@@ -26,56 +24,61 @@ const cursor = document.getElementById('cursor');
 const follower = document.getElementById('cursorFollower');
 let mouseX = 0, mouseY = 0;
 let followerX = 0, followerY = 0;
+const isDesktop = window.matchMedia('(min-width: 769px)').matches;
 
-document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-    cursor.style.left = mouseX - 4 + 'px';
-    cursor.style.top = mouseY - 4 + 'px';
-});
-
-function animateFollower() {
-    followerX += (mouseX - followerX) * 0.1;
-    followerY += (mouseY - followerY) * 0.1;
-    follower.style.left = followerX - 20 + 'px';
-    follower.style.top = followerY - 20 + 'px';
-    requestAnimationFrame(animateFollower);
-}
-animateFollower();
-
-// Contextual cursor
-const cursorLabel = document.getElementById('cursorLabel');
-const cursorClasses = ['cursor--view', 'cursor--go', 'cursor--type', 'cursor--violet', 'cursor--active'];
-
-function setCursor(cls, label) {
-    follower.classList.remove(...cursorClasses);
-    if (cls) {
-        follower.classList.add(cls, 'cursor--active');
-        cursorLabel.textContent = label;
-        cursor.style.background = cls === 'cursor--violet' ? 'var(--violet)' : 'var(--accent)';
-        cursor.style.mixBlendMode = cls === 'cursor--violet' ? 'normal' : 'difference';
-    } else {
-        cursorLabel.textContent = '';
-        cursor.style.background = 'var(--accent)';
-        cursor.style.mixBlendMode = 'difference';
-    }
-}
-
-const cursorZones = [
-    { selector: '.project',                                                    label: 'VIEW →',  cls: 'cursor--view'   },
-    { selector: '.nav-link, .nav-mobile-link, .footer-social',                 label: 'GO →',    cls: 'cursor--go'     },
-    { selector: '.nav-logo, .footer-logo',                                     label: 'HOME',    cls: 'cursor--go'     },
-    { selector: 'input, textarea, select',                                     label: 'ÉCRIRE',  cls: 'cursor--type'   },
-    { selector: '.btn-submit',                                                 label: 'ENVOYER', cls: 'cursor--violet'  },
-    { selector: '.link-arrow',                                                 label: 'VOIR →',  cls: 'cursor--violet'  },
-];
-
-cursorZones.forEach(({ selector, label, cls }) => {
-    document.querySelectorAll(selector).forEach(el => {
-        el.addEventListener('mouseenter', () => setCursor(cls, label));
-        el.addEventListener('mouseleave', () => setCursor(null, ''));
+if (isDesktop) {
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursor.style.left = mouseX - 4 + 'px';
+        cursor.style.top = mouseY - 4 + 'px';
     });
-});
+
+    function animateFollower() {
+        followerX += (mouseX - followerX) * 0.1;
+        followerY += (mouseY - followerY) * 0.1;
+        follower.style.left = followerX - 20 + 'px';
+        follower.style.top = followerY - 20 + 'px';
+        requestAnimationFrame(animateFollower);
+    }
+    animateFollower();
+}
+
+// Contextual cursor (desktop only)
+if (isDesktop) {
+    const cursorLabel = document.getElementById('cursorLabel');
+    const cursorClasses = ['cursor--view', 'cursor--go', 'cursor--type', 'cursor--violet', 'cursor--active'];
+
+    function setCursor(cls, label) {
+        follower.classList.remove(...cursorClasses);
+        if (cls) {
+            follower.classList.add(cls, 'cursor--active');
+            cursorLabel.textContent = label;
+            cursor.style.background = cls === 'cursor--violet' ? 'var(--violet)' : 'var(--accent)';
+            cursor.style.mixBlendMode = cls === 'cursor--violet' ? 'normal' : 'difference';
+        } else {
+            cursorLabel.textContent = '';
+            cursor.style.background = 'var(--accent)';
+            cursor.style.mixBlendMode = 'difference';
+        }
+    }
+
+    const cursorZones = [
+        { selector: '.project',                                                    label: 'VIEW →',  cls: 'cursor--view'   },
+        { selector: '.nav-link, .nav-mobile-link, .footer-social',                 label: 'GO →',    cls: 'cursor--go'     },
+        { selector: '.nav-logo, .footer-logo',                                     label: 'HOME',    cls: 'cursor--go'     },
+        { selector: 'input, textarea, select',                                     label: 'ÉCRIRE',  cls: 'cursor--type'   },
+        { selector: '.btn-submit',                                                 label: 'ENVOYER', cls: 'cursor--violet'  },
+        { selector: '.link-arrow',                                                 label: 'VOIR →',  cls: 'cursor--violet'  },
+    ];
+
+    cursorZones.forEach(({ selector, label, cls }) => {
+        document.querySelectorAll(selector).forEach(el => {
+            el.addEventListener('mouseenter', () => setCursor(cls, label));
+            el.addEventListener('mouseleave', () => setCursor(null, ''));
+        });
+    });
+}
 
 // ============================================
 // NAVIGATION (Sonido pattern — dropdown menu)
@@ -226,20 +229,22 @@ function animateHero() {
     const heroLogoSvg = document.getElementById('heroLogoSvg');
 
     function frame() {
-        time += 0.007;
+        if (!document.hidden) {
+            time += 0.007;
 
-        // Fond noir
-        ctx.clearRect(0, 0, W, H);
-        ctx.fillStyle = '#000';
-        ctx.fillRect(0, 0, W, H);
+            // Fond noir
+            ctx.clearRect(0, 0, W, H);
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, W, H);
 
-        // Topo plein écran, sans masque
-        drawTopoLines(time);
+            // Topo plein écran, sans masque
+            drawTopoLines(time);
 
-        // Zoom logo SVG selon scroll
-        if (heroLogoSvg) {
-            const logoScale = 1 + scrollProgress * 0.5;
-            heroLogoSvg.style.transform = `translate(-50%, -50%) scale(${logoScale})`;
+            // Zoom logo SVG selon scroll
+            if (heroLogoSvg) {
+                const logoScale = 1 + scrollProgress * 0.5;
+                heroLogoSvg.style.transform = `translate(-50%, -50%) scale(${logoScale})`;
+            }
         }
 
         requestAnimationFrame(frame);
@@ -324,7 +329,7 @@ if (window.innerWidth > 768) {
             const moveX = (x - centerX) / 30;
             const moveY = (y - centerY) / 30;
 
-            project.style.transform = `translateY(-4px) translate(${moveX}px, ${moveY}px)`;
+            project.style.transform = `scale(1.02) translate(${moveX}px, ${moveY}px)`;
         });
 
         project.addEventListener('mouseleave', () => {

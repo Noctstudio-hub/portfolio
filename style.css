@@ -3,15 +3,11 @@
    ============================================ */
 :root {
     --black: #0A0A0A;
-    --dark: #0A0A0A;
     --dark-2: #111111;
     --dark-3: #1A1A1A;
-    --gray-1: #1A1A1A;
     --gray-2: #333333;
-    --gray-3: #444444;
+    --gray-3: #666666;
     --gray-4: #888888;
-    --gray-5: #888888;
-    --light: #F0F0F0;
     --white: #F0F0F0;
     --accent: #ADFF00;
     --accent-dim: rgba(173, 255, 0, 0.08);
@@ -40,7 +36,7 @@ html {
 body {
     font-family: var(--font-body);
     background: var(--black);
-    color: var(--light);
+    color: var(--white);
     line-height: 1.6;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
@@ -279,8 +275,20 @@ img { max-width: 100%; display: block; }
     color: var(--accent);
 }
 
+/* Underline accent animé au hover — slide depuis la gauche */
 .nav-link::after {
-    display: none;
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--accent);
+    transition: width 0.3s var(--ease);
+}
+
+.nav-link:hover::after {
+    width: 100%;
 }
 
 /* Right group: burger button (mobile only) */
@@ -379,10 +387,9 @@ img { max-width: 100%; display: block; }
     color: var(--gray-4);
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    transition: color 0.3s var(--ease), background 0.3s var(--ease);
     opacity: 0;
     transform: translateY(10px);
-    transition: opacity 0.4s var(--ease), transform 0.4s var(--ease), color 0.3s var(--ease);
+    transition: opacity 0.4s var(--ease), transform 0.4s var(--ease), color 0.3s var(--ease), background 0.3s var(--ease);
 }
 
 .nav-mobile.open .nav-mobile-link {
@@ -535,7 +542,7 @@ img { max-width: 100%; display: block; }
     font-weight: 900;
     line-height: 1.0;
     color: var(--white);
-    letter-spacing: 0.02em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
     margin-bottom: 24px;
 }
@@ -577,7 +584,7 @@ img { max-width: 100%; display: block; }
 .section-label {
     font-family: var(--font-body);
     font-size: 0.65rem;
-    color: #444444;
+    color: var(--gray-3);
     letter-spacing: 0.1em;
     font-weight: 400;
 }
@@ -602,7 +609,7 @@ img { max-width: 100%; display: block; }
 }
 
 .section-heading-xl {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-size: clamp(2.8rem, 6.5vw, 5.5rem);
 }
 
 /* ============================================
@@ -642,6 +649,12 @@ img { max-width: 100%; display: block; }
 
 .project-wide {
     grid-column: span 2;
+}
+
+/* Projet wide (03) — accent violet pour distinguer le format panoramique */
+.projects-grid:has(.project:hover) .project-wide:hover {
+    outline-color: var(--violet);
+    box-shadow: 0 0 40px rgba(123, 47, 255, 0.15), 0 0 60px rgba(123, 47, 255, 0.12), 0 24px 80px rgba(0, 0, 0, 0.6);
 }
 
 .project-img {
@@ -686,20 +699,31 @@ img { max-width: 100%; display: block; }
     padding: 20px 4px;
 }
 
+/* Texte info carte — réponse subtile au hover du projet parent */
 .project-name {
     font-family: var(--font-display);
     font-size: 1.1rem;
-    font-weight: 700;
+    font-weight: 900;
     color: var(--white);
     letter-spacing: 0.05em;
     text-transform: uppercase;
+    transition: color 0.4s var(--ease);
+}
+
+.project:hover .project-name {
+    color: var(--accent);
 }
 
 .project-cat {
     font-family: var(--font-body);
     font-size: 0.75rem;
-    color: #444444;
+    color: var(--gray-3);
     letter-spacing: 0.08em;
+    transition: color 0.4s var(--ease);
+}
+
+.project:hover .project-cat {
+    color: var(--gray-4);
 }
 
 .section-cta {
@@ -771,13 +795,14 @@ img { max-width: 100%; display: block; }
     font-weight: 900;
     color: var(--accent);
     line-height: 1;
+    letter-spacing: 0.03em;
     margin-bottom: 8px;
 }
 
 .about-stat-label {
     font-family: var(--font-body);
     font-size: 0.7rem;
-    color: #444444;
+    color: var(--gray-3);
     letter-spacing: 0.08em;
     text-transform: uppercase;
 }
@@ -832,14 +857,14 @@ img { max-width: 100%; display: block; }
     font-family: var(--font-body);
     font-size: 0.7rem;
     font-weight: 400;
-    color: #444444;
+    color: var(--gray-3);
     letter-spacing: 0.1em;
 }
 
 .service-title {
     font-family: var(--font-display);
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 900;
     color: var(--white);
     margin-bottom: 8px;
     letter-spacing: 0.05em;
@@ -947,7 +972,7 @@ img { max-width: 100%; display: block; }
     font-family: var(--font-body);
     font-size: 0.65rem;
     font-weight: 500;
-    color: #444444;
+    color: var(--gray-3);
     letter-spacing: 0.12em;
     text-transform: uppercase;
     margin-bottom: 10px;
@@ -968,7 +993,7 @@ img { max-width: 100%; display: block; }
 }
 
 .form-input::placeholder {
-    color: #444444;
+    color: var(--gray-3);
 }
 
 .form-input:focus {
@@ -1056,6 +1081,7 @@ img { max-width: 100%; display: block; }
     gap: 32px;
 }
 
+/* Liens sociaux footer — underline animé cohérent avec nav */
 .footer-social {
     font-family: var(--font-body);
     font-size: 0.75rem;
@@ -1066,8 +1092,23 @@ img { max-width: 100%; display: block; }
     position: relative;
 }
 
+.footer-social::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--accent);
+    transition: width 0.3s var(--ease);
+}
+
 .footer-social:hover {
     color: var(--accent);
+}
+
+.footer-social:hover::after {
+    width: 100%;
 }
 
 .footer-bottom {
@@ -1078,7 +1119,7 @@ img { max-width: 100%; display: block; }
     border-top: 1px solid rgba(173, 255, 0, 0.15);
     font-family: var(--font-body);
     font-size: 0.7rem;
-    color: #444444;
+    color: var(--gray-3);
     letter-spacing: 0.05em;
 }
 
@@ -1106,10 +1147,6 @@ img { max-width: 100%; display: block; }
 @media (max-width: 1024px) {
     .hero {
         padding: 10px;
-    }
-
-    .hero-card {
-        height: calc(100vh - 20px);
     }
 
     .about-layout,
@@ -1143,23 +1180,8 @@ img { max-width: 100%; display: block; }
         padding: 8px;
     }
 
-    .hero-card {
-        height: calc(100dvh - 16px);
-    }
-
     .nav-inner {
         padding: 0 12px;
-    }
-
-    .hero-text {
-        bottom: 24px;
-        left: 16px;
-        right: 16px;
-        max-width: none;
-    }
-
-    .hero-title {
-        font-size: clamp(1.8rem, 7vw, 2.8rem);
     }
 
     .projects-grid {
