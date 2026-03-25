@@ -214,24 +214,27 @@ function animateHero() {
 
     function frame() {
         time += 0.007;
-        ctx.clearRect(0, 0, W, H);
 
         // 1. Fond noir
+        ctx.clearRect(0, 0, W, H);
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, W, H);
 
-        // 3. Masque logo : clip + topo à l'intérieur
+        // 2. Clip logo : transformer le path en coords écran
         const baseScale = Math.min(W / LOGO_W, H / LOGO_H) * 0.65;
         const scale     = baseScale * (1 + scrollProgress * 5);
         const tx        = W / 2 - LOGO_CX * scale;
         const ty        = H / 2 - LOGO_CY * scale;
 
+        const m = new DOMMatrix([scale, 0, 0, scale, tx, ty]);
+        const clipPath = new Path2D();
+        clipPath.addPath(logoPath, m);
+
         ctx.save();
-        ctx.setTransform(scale, 0, 0, scale, tx, ty);
-        ctx.clip(logoPath);
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.clip(clipPath);
         drawTopoLines(time);
         ctx.restore();
+
         requestAnimationFrame(frame);
     }
     frame();
