@@ -1040,203 +1040,284 @@ img { max-width: 100%; display: block; }
 /* ============================================
    FOOTER
    ============================================ */
+/* ============================================
+   FOOTER — GRILLE MARATHON / NOCT STUDIO
+   ============================================ */
+
 .footer {
     position: relative;
     background: var(--black);
-    padding: 0 0 40px;
     overflow: hidden;
 }
 
-/* Séparateur vert accent en haut du footer */
-.footer-separator {
-    width: 100%;
-    height: 2px;
-    background: var(--accent);
+.footer-inner {
+    position: relative;
 }
 
-/* Texte décoratif arrière-plan */
-.footer-bg-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: var(--font-display);
-    font-size: clamp(160px, 25vw, 320px);
-    font-weight: 900;
-    color: var(--white);
-    opacity: 0.03;
-    white-space: nowrap;
-    pointer-events: none;
-    user-select: none;
-    letter-spacing: -0.02em;
-    line-height: 1;
-    z-index: 0;
-}
-
-/* Grille 4 colonnes */
+/* Grille principale — style tableau avec bordures fines */
 .footer-grid {
     display: grid;
-    grid-template-columns: 1.2fr 1.4fr 1fr 1fr;
-    gap: 48px;
-    padding: 64px 0 48px;
-    position: relative;
-    z-index: 1;
+    grid-template-columns: 1fr 1.4fr 1fr 200px;
+    grid-template-rows: auto auto;
+    border-top: 1px solid rgba(173, 255, 0, 0.18);
+    border-left: 1px solid rgba(173, 255, 0, 0.18);
 }
 
-/* Colonne générique */
-.footer-col {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-/* Label de colonne */
-.footer-col-label {
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    color: var(--gray-3);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-bottom: 4px;
-}
-
-/* --- Col 1 : Brand --- */
-.footer-logo-link {
-    display: inline-block;
-}
-
-.footer-logo-svg {
-    width: 80px;
-    height: auto;
-    display: block;
-}
-
-.footer-baseline {
-    font-family: var(--font-body);
-    font-size: 0.8rem;
-    color: var(--gray-4);
-    line-height: 1.7;
-    letter-spacing: 0.02em;
-}
-
-.footer-location {
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    color: var(--gray-3);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    margin-top: auto;
-}
-
-/* --- Col 2 : Signature --- */
-.footer-signature {
-    font-family: var(--font-display);
-    font-size: clamp(2.4rem, 4.5vw, 4rem);
-    font-weight: 900;
-    line-height: 0.92;
-    letter-spacing: -0.01em;
-    text-transform: uppercase;
-    color: var(--white);
-}
-
-/* --- Col 3 : Socials --- */
-.footer-socials-list {
+.footer-cell {
+    border-right: 1px solid rgba(173, 255, 0, 0.18);
+    border-bottom: 1px solid rgba(173, 255, 0, 0.18);
+    padding: 28px 32px;
     display: flex;
     flex-direction: column;
     gap: 14px;
 }
 
-.footer-social {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.footer-cell-label {
     font-family: var(--font-body);
-    font-size: 0.78rem;
-    color: var(--gray-4);
-    letter-spacing: 0.06em;
+    font-size: 0.52rem;
+    color: rgba(173, 255, 0, 0.4);
+    letter-spacing: 0.28em;
     text-transform: uppercase;
-    transition: color 0.25s var(--ease);
-    position: relative;
 }
 
-.footer-social-arrow {
-    color: var(--accent);
-    font-size: 1rem;
-    line-height: 1;
-    transition: transform 0.25s var(--ease);
+/* CELL 1 — Logo */
+.footer-cell--logo {
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.footer-logo-link {
     display: inline-block;
 }
 
-.footer-social:hover {
+.footer-logo-svg {
+    width: 68px;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 0 8px rgba(173, 255, 0, 0.3));
+    transition: filter 0.3s var(--ease);
+}
+
+.footer-logo-link:hover .footer-logo-svg {
+    filter: drop-shadow(0 0 14px rgba(173, 255, 0, 0.8));
+}
+
+.footer-baseline {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    color: var(--gray-4);
+    line-height: 1.7;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+/* CELL 2 — Manifeste (spans 2 cols) */
+.footer-cell--manifeste {
+    grid-column: 2 / 4;
+    grid-row: 1;
+    justify-content: flex-end;
+}
+
+.footer-manifeste {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 4.5vw, 4.5rem);
+    font-weight: 900;
+    line-height: 0.88;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
     color: var(--white);
 }
 
-.footer-social:hover .footer-social-arrow {
-    transform: translateX(4px);
+/* CELL 3 — Rayures diagonales vert/noir (spans les 2 rows) */
+.footer-cell--accent {
+    grid-column: 4;
+    grid-row: 1 / 3;
+    padding: 0;
+    overflow: hidden;
+    position: relative;
+}
+
+.footer-stripes {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        -45deg,
+        var(--accent)  0px,
+        var(--accent)  5px,
+        var(--black)   5px,
+        var(--black)   20px
+    );
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 28px;
+}
+
+.footer-stripes-label {
+    font-family: var(--font-body);
+    font-size: 0.5rem;
+    letter-spacing: 0.3em;
+    color: rgba(10, 10, 10, 0.75);
+    text-transform: uppercase;
+    white-space: nowrap;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    user-select: none;
+    pointer-events: none;
+}
+
+/* CELL 4 — Réseaux sociaux */
+.footer-cell--socials {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.footer-socials-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.footer-social {
+    display: flex;
+    align-items: center;
+    font-family: var(--font-body);
+    font-size: 0.68rem;
+    color: var(--gray-4);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(173, 255, 0, 0.07);
+    transition: color 0.2s var(--ease), padding-left 0.2s var(--ease);
+}
+
+.footer-social:last-child {
+    border-bottom: none;
+}
+
+.footer-social-prefix {
+    font-family: var(--font-body);
+    font-size: 0.58rem;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    margin-right: 12px;
+    flex-shrink: 0;
+    opacity: 0.65;
+    transition: opacity 0.2s var(--ease);
+}
+
+.footer-social:hover {
+    color: var(--accent);
+    padding-left: 6px;
+}
+
+.footer-social:hover .footer-social-prefix {
+    opacity: 1;
 }
 
 .footer-social--soon {
-    opacity: 0.45;
+    opacity: 0.28;
     pointer-events: none;
 }
 
 .footer-social-tag {
     font-family: var(--font-body);
-    font-size: 0.55rem;
+    font-size: 0.48rem;
     color: var(--accent);
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    border: 1px solid var(--accent);
+    border: 1px solid rgba(173, 255, 0, 0.4);
     padding: 1px 5px;
-    margin-left: 4px;
-    opacity: 0.7;
+    margin-left: 10px;
 }
 
-/* --- Col 4 : Contact --- */
+/* CELL 5 — Contact */
+.footer-cell--contact {
+    grid-column: 2;
+    grid-row: 2;
+}
+
 .footer-contact-email {
     font-family: var(--font-body);
-    font-size: 0.78rem;
+    font-size: 0.68rem;
     color: var(--accent);
-    line-height: 1.6;
-    letter-spacing: 0.02em;
-    transition: opacity 0.25s var(--ease);
+    line-height: 1.7;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: block;
+    transition: opacity 0.2s var(--ease);
 }
 
 .footer-contact-email:hover {
-    opacity: 0.7;
+    opacity: 0.6;
+}
+
+.footer-location {
+    font-family: var(--font-body);
+    font-size: 0.58rem;
+    color: var(--gray-3);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-top: auto;
+}
+
+/* CELL 6 — Légal */
+.footer-cell--legal {
+    grid-column: 3;
+    grid-row: 2;
 }
 
 .footer-legal-links {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-top: auto;
+    gap: 0;
 }
 
 .footer-legal-link {
     font-family: var(--font-body);
-    font-size: 0.65rem;
+    font-size: 0.58rem;
     color: var(--gray-3);
-    letter-spacing: 0.06em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    transition: color 0.25s var(--ease);
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(173, 255, 0, 0.07);
+    transition: color 0.2s var(--ease), padding-left 0.2s var(--ease);
+}
+
+.footer-legal-link:first-child {
+    border-top: 1px solid rgba(173, 255, 0, 0.07);
 }
 
 .footer-legal-link:hover {
     color: var(--white);
+    padding-left: 6px;
 }
 
-/* Copyright */
+/* BARRE COPYRIGHT */
 .footer-bottom {
-    text-align: center;
-    padding-top: 24px;
-    border-top: 1px solid rgba(173, 255, 0, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px;
+    border-top: 1px solid rgba(173, 255, 0, 0.18);
+    border-left: 1px solid rgba(173, 255, 0, 0.18);
+    border-right: 1px solid rgba(173, 255, 0, 0.18);
+}
+
+.footer-copyright {
     font-family: var(--font-body);
-    font-size: 0.65rem;
+    font-size: 0.55rem;
     color: var(--gray-3);
-    letter-spacing: 0.08em;
-    position: relative;
-    z-index: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.footer-version {
+    font-family: var(--font-body);
+    font-size: 0.55rem;
+    color: rgba(173, 255, 0, 0.3);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
 }
 
 /* ============================================
@@ -1733,16 +1814,18 @@ img { max-width: 100%; display: block; }
 
     .service:hover { padding-left: 0; }
 
-    /* Footer — 2 colonnes sur tablette */
+    /* Footer — layout tablette */
     .footer-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 40px 32px;
+        grid-template-columns: 1fr 1fr 160px;
+        grid-template-rows: auto auto auto;
     }
-
-    .footer-col--signature {
-        grid-column: span 2;
-        order: -1;
-    }
+    .footer-cell--logo      { grid-column: 1; grid-row: 1; }
+    .footer-cell--manifeste { grid-column: 2; grid-row: 1; }
+    .footer-cell--accent    { grid-column: 3; grid-row: 1 / 4; }
+    .footer-cell--socials   { grid-column: 1; grid-row: 2; }
+    .footer-cell--contact   { grid-column: 1; grid-row: 3; }
+    .footer-cell--legal     { grid-column: 2; grid-row: 2 / 4; }
+    .footer-manifeste       { font-size: clamp(2rem, 4vw, 3.2rem); }
 }
 
 @media (max-width: 480px) {
@@ -1766,20 +1849,28 @@ img { max-width: 100%; display: block; }
     /* Footer — 1 colonne sur mobile */
     .footer-grid {
         grid-template-columns: 1fr;
-        gap: 36px;
-        padding: 48px 0 32px;
+        border: none;
     }
-
-    .footer-col--signature {
-        grid-column: span 1;
-        order: -1;
+    .footer-cell {
+        border: none;
+        border-top: 1px solid rgba(173, 255, 0, 0.12);
+        padding: 24px 20px;
     }
-
-    .footer-signature {
-        font-size: clamp(2.8rem, 14vw, 4rem);
+    .footer-cell--logo      { grid-column: 1; grid-row: 1; }
+    .footer-cell--manifeste { grid-column: 1; grid-row: 2; }
+    .footer-cell--socials   { grid-column: 1; grid-row: 3; }
+    .footer-cell--contact   { grid-column: 1; grid-row: 4; }
+    .footer-cell--legal     { grid-column: 1; grid-row: 5; }
+    .footer-cell--accent    { display: none; }
+    .footer-manifeste {
+        font-size: clamp(2.2rem, 10vw, 3.5rem);
     }
-
     .footer-bottom {
-        font-size: 0.6rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        border: none;
+        border-top: 1px solid rgba(173, 255, 0, 0.12);
+        padding: 20px;
     }
 }

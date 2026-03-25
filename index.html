@@ -352,71 +352,78 @@
 
     <!-- Footer -->
     <footer class="footer" id="footer">
-        <!-- Élément décoratif arrière-plan -->
-        <div class="footer-bg-text" aria-hidden="true">NOCT</div>
+        <div class="footer-inner">
 
-        <!-- Séparateur accent vert -->
-        <div class="footer-separator"></div>
-
-        <div class="container">
             <div class="footer-grid">
 
-                <!-- Colonne 1 : Logo + baseline -->
-                <div class="footer-col footer-col--brand">
-                    <a href="#" class="footer-logo-link">
-                        <svg class="footer-logo-svg" viewBox="900 750 1700 1000" xmlns="http://www.w3.org/2000/svg" aria-label="Noct Studio">
+                <!-- Cellule 1 : Logo + baseline -->
+                <div class="footer-cell footer-cell--logo">
+                    <span class="footer-cell-label">NOCT STUDIO</span>
+                    <a href="#" class="footer-logo-link" aria-label="Noct Studio — retour en haut">
+                        <svg class="footer-logo-svg" viewBox="900 750 1700 1000" xmlns="http://www.w3.org/2000/svg">
                             <rect x="947.266" y="785.229" width="455.854" height="909.858" fill="#ADFF00"/>
                             <rect x="2312.851" y="785.229" width="247.757" height="247.757" fill="#ADFF00"/>
                             <path d="M1875.868,785.229c0,238.817 196.310,431.783 436.983,431.783l0,474.725c-503.691,0 -911.709,-406.702 -911.709,-906.509l474.725,0Z" fill="#ADFF00"/>
                         </svg>
                     </a>
-                    <p class="footer-baseline">Systèmes visuels<br>pour artistes</p>
-                    <span class="footer-location">Pont-du-Casse · France</span>
+                    <p class="footer-baseline">SYSTÈMES VISUELS<br>POUR ARTISTES</p>
                 </div>
 
-                <!-- Colonne 2 : Phrase signature -->
-                <div class="footer-col footer-col--signature">
-                    <p class="footer-signature">
-                        L'IMAGE<br>
-                        AVANT<br>
-                        LE BRUIT.
-                    </p>
+                <!-- Cellule 2 : Manifeste (spans 2 cols) -->
+                <div class="footer-cell footer-cell--manifeste">
+                    <span class="footer-cell-label">MANIFESTE</span>
+                    <p class="footer-manifeste">UN<br>SYSTÈME.<br>PAS UNE<br>DÉCORATION.</p>
                 </div>
 
-                <!-- Colonne 3 : Réseaux sociaux -->
-                <div class="footer-col footer-col--socials">
-                    <span class="footer-col-label">Réseaux</span>
+                <!-- Cellule 3 : Bloc rayures diagonales -->
+                <div class="footer-cell footer-cell--accent" aria-hidden="true">
+                    <div class="footer-stripes">
+                        <span class="footer-stripes-label">NOCT · STUDIO · 2026</span>
+                    </div>
+                </div>
+
+                <!-- Cellule 4 : Réseaux sociaux -->
+                <div class="footer-cell footer-cell--socials">
+                    <span class="footer-cell-label">RÉSEAUX</span>
                     <nav class="footer-socials-list" aria-label="Réseaux sociaux">
                         <a href="https://www.instagram.com/noct_studi0?igsh=c3lxZXg3emE3d3Qz&utm_source=qr" target="_blank" rel="noopener" class="footer-social">
-                            <span class="footer-social-arrow">→</span>Instagram
+                            <span class="footer-social-prefix">[IG]</span>INSTAGRAM
                         </a>
                         <a href="https://www.threads.com/@noct_studi0?igshid=NTc4MTIwNjQ2YQ==" target="_blank" rel="noopener" class="footer-social">
-                            <span class="footer-social-arrow">→</span>Threads
+                            <span class="footer-social-prefix">[TH]</span>THREADS
                         </a>
                         <a href="#" class="footer-social footer-social--soon">
-                            <span class="footer-social-arrow">→</span>TikTok<span class="footer-social-tag">Bientôt</span>
+                            <span class="footer-social-prefix">[TK]</span>TIKTOK<span class="footer-social-tag">BIENTÔT</span>
                         </a>
                     </nav>
                 </div>
 
-                <!-- Colonne 4 : Contact + mentions légales -->
-                <div class="footer-col footer-col--contact">
-                    <span class="footer-col-label">Contact</span>
+                <!-- Cellule 5 : Contact -->
+                <div class="footer-cell footer-cell--contact">
+                    <span class="footer-cell-label">CONTACT</span>
                     <a href="mailto:contact.noctstudio@gmail.com" class="footer-contact-email">
-                        contact.noctstudio<br>@gmail.com
+                        CONTACT.NOCTSTUDIO<br>@GMAIL.COM
                     </a>
+                    <span class="footer-location">PONT-DU-CASSE · FRANCE</span>
+                </div>
+
+                <!-- Cellule 6 : Légal -->
+                <div class="footer-cell footer-cell--legal">
+                    <span class="footer-cell-label">LÉGAL</span>
                     <nav class="footer-legal-links" aria-label="Mentions légales">
-                        <a href="#" class="footer-legal-link">Mentions légales</a>
-                        <a href="#" class="footer-legal-link">Confidentialité</a>
+                        <a href="#" class="footer-legal-link">MENTIONS LÉGALES</a>
+                        <a href="#" class="footer-legal-link">CONFIDENTIALITÉ</a>
                     </nav>
                 </div>
 
             </div>
 
-            <!-- Copyright -->
+            <!-- Barre copyright -->
             <div class="footer-bottom">
-                <span>&copy; 2026 Noct Studio — Mavrick. Tous droits réservés.</span>
+                <span class="footer-copyright">© 2026 NOCT STUDIO — MAVRICK. TOUS DROITS RÉSERVÉS.</span>
+                <span class="footer-version">V.2026</span>
             </div>
+
         </div>
     </footer>
 
