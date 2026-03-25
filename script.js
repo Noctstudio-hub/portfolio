@@ -10,6 +10,7 @@ if ('scrollRestoration' in history) {
 // ============================================
 window.addEventListener('load', () => {
     window.scrollTo(0, 0);
+    initHorizontalScroll();
     setTimeout(() => {
         document.getElementById('loader').classList.add('hidden');
         document.body.style.overflow = '';
@@ -312,6 +313,74 @@ form.addEventListener('submit', (e) => {
         }, 3000);
     }, 1500);
 });
+
+// ============================================
+// HORIZONTAL SCROLL — WORKS SECTION
+// ============================================
+function initHorizontalScroll() {
+    const outer   = document.querySelector('.works-outer');
+    const track   = document.getElementById('projectsTrack');
+    const bar     = document.getElementById('worksProgressBar');
+    const numEl   = document.getElementById('worksCurrentNum');
+    const projects = track ? track.querySelectorAll('.project') : [];
+
+    if (!outer || !track || window.innerWidth <= 768) return;
+
+    let trackOverflow = 0;
+    let currentX  = 0;
+    let targetX   = 0;
+    let rafId     = null;
+
+    // — Lerp animation loop —
+    function animateTrack() {
+        const diff = targetX - currentX;
+        if (Math.abs(diff) < 0.05) {
+            currentX = targetX;
+            rafId = null;
+        } else {
+            currentX += diff * 0.10;
+            rafId = requestAnimationFrame(animateTrack);
+        }
+        track.style.transform = `translateX(${currentX}px)`;
+
+        if (bar) bar.style.transform = `scaleX(${Math.abs(currentX) / trackOverflow})`;
+
+        // Counter
+        if (numEl && projects.length > 0) {
+            const p   = Math.abs(currentX) / trackOverflow;
+            const idx = Math.min(projects.length - 1, Math.round(p * (projects.length - 1)));
+            numEl.textContent = String(idx + 1).padStart(2, '0');
+        }
+    }
+
+    // — Scroll handler —
+    function onScroll() {
+        if (trackOverflow === 0) return;
+        const outerTop  = outer.getBoundingClientRect().top + window.scrollY;
+        const scrolled  = window.scrollY - outerTop;
+        const progress  = Math.max(0, Math.min(1, scrolled / trackOverflow));
+        targetX = -trackOverflow * progress;
+        if (!rafId) rafId = requestAnimationFrame(animateTrack);
+    }
+
+    // — Resize: recalculate track overflow + section height —
+    function onResize() {
+        track.style.transform = 'translateX(0)';
+        currentX = 0;
+        targetX  = 0;
+        requestAnimationFrame(() => {
+            trackOverflow = Math.max(0, track.scrollWidth - window.innerWidth);
+            if (trackOverflow > 0) {
+                outer.style.height = (window.innerHeight + trackOverflow) + 'px';
+            }
+            onScroll();
+        });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onResize);
+    onResize();
+}
 
 // ============================================
 // MAGNETIC EFFECT ON PROJECTS (Desktop)
