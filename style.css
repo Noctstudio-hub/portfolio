@@ -413,7 +413,7 @@ img { max-width: 100%; display: block; }
    ============================================ */
 .hero {
     position: relative;
-    height: 350vh;
+    height: 180vh;
     background: var(--black);
 }
 
@@ -632,31 +632,15 @@ img { max-width: 100%; display: block; }
     z-index: 0;
 }
 
-/* Invasion : les autres projets s'effacent */
-.projects-grid:has(.project:hover) .project {
-    opacity: 0.2;
-    filter: grayscale(0.4);
-}
-
-/* Le projet survolé impose sa présence */
-.projects-grid:has(.project:hover) .project:hover {
-    opacity: 1;
-    filter: none;
-    transform: scale(1.02);
-    outline-color: var(--accent);
-    box-shadow: 0 0 40px rgba(173, 255, 0, 0.15), 0 0 60px rgba(173, 255, 0, 0.12), 0 24px 80px rgba(0, 0, 0, 0.6);
-    z-index: 2;
-}
+/* Invasion effect — disabled for fullscreen sticky panels (only one panel visible at a time) */
+/* .projects-grid:has(.project:hover) .project { opacity: 0.2; } */
+/* .projects-grid:has(.project:hover) .project:hover { opacity: 1; transform: scale(1.02); } */
 
 .project-wide {
     grid-column: span 2;
 }
 
-/* Projet wide (03) — accent violet pour distinguer le format panoramique */
-.projects-grid:has(.project:hover) .project-wide:hover {
-    outline-color: var(--violet);
-    box-shadow: 0 0 40px rgba(123, 47, 255, 0.15), 0 0 60px rgba(123, 47, 255, 0.12), 0 24px 80px rgba(0, 0, 0, 0.6);
-}
+/* Wide project hover — accent is now handled by .project-accent-line (violet) */
 
 .project-img {
     position: relative;
@@ -1057,71 +1041,202 @@ img { max-width: 100%; display: block; }
    FOOTER
    ============================================ */
 .footer {
-    padding: 48px 0;
-    border-top: 1px solid var(--accent);
+    position: relative;
+    background: var(--black);
+    padding: 0 0 40px;
+    overflow: hidden;
 }
 
-.footer-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 48px;
+/* Séparateur vert accent en haut du footer */
+.footer-separator {
+    width: 100%;
+    height: 2px;
+    background: var(--accent);
 }
 
-.footer-logo {
+/* Texte décoratif arrière-plan */
+.footer-bg-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-family: var(--font-display);
-    font-size: 1.4rem;
+    font-size: clamp(160px, 25vw, 320px);
     font-weight: 900;
-    color: var(--accent);
+    color: var(--white);
+    opacity: 0.03;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    z-index: 0;
+}
+
+/* Grille 4 colonnes */
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1.4fr 1fr 1fr;
+    gap: 48px;
+    padding: 64px 0 48px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Colonne générique */
+.footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Label de colonne */
+.footer-col-label {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    color: var(--gray-3);
     letter-spacing: 0.2em;
     text-transform: uppercase;
+    margin-bottom: 4px;
 }
 
-.footer-socials {
-    display: flex;
-    gap: 32px;
+/* --- Col 1 : Brand --- */
+.footer-logo-link {
+    display: inline-block;
 }
 
-/* Liens sociaux footer — underline animé cohérent avec nav */
-.footer-social {
+.footer-logo-svg {
+    width: 80px;
+    height: auto;
+    display: block;
+}
+
+.footer-baseline {
     font-family: var(--font-body);
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: var(--gray-4);
-    letter-spacing: 0.08em;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+}
+
+.footer-location {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    color: var(--gray-3);
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    transition: color 0.3s var(--ease);
+    margin-top: auto;
+}
+
+/* --- Col 2 : Signature --- */
+.footer-signature {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 4.5vw, 4rem);
+    font-weight: 900;
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    color: var(--white);
+}
+
+/* --- Col 3 : Socials --- */
+.footer-socials-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.footer-social {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    color: var(--gray-4);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.25s var(--ease);
     position: relative;
 }
 
-.footer-social::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 1px;
-    background: var(--accent);
-    transition: width 0.3s var(--ease);
+.footer-social-arrow {
+    color: var(--accent);
+    font-size: 1rem;
+    line-height: 1;
+    transition: transform 0.25s var(--ease);
+    display: inline-block;
 }
 
 .footer-social:hover {
-    color: var(--accent);
+    color: var(--white);
 }
 
-.footer-social:hover::after {
-    width: 100%;
+.footer-social:hover .footer-social-arrow {
+    transform: translateX(4px);
 }
 
-.footer-bottom {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding-top: 24px;
-    border-top: 1px solid rgba(173, 255, 0, 0.15);
+.footer-social--soon {
+    opacity: 0.45;
+    pointer-events: none;
+}
+
+.footer-social-tag {
     font-family: var(--font-body);
-    font-size: 0.7rem;
+    font-size: 0.55rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: 1px solid var(--accent);
+    padding: 1px 5px;
+    margin-left: 4px;
+    opacity: 0.7;
+}
+
+/* --- Col 4 : Contact --- */
+.footer-contact-email {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    color: var(--accent);
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+    transition: opacity 0.25s var(--ease);
+}
+
+.footer-contact-email:hover {
+    opacity: 0.7;
+}
+
+.footer-legal-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.footer-legal-link {
+    font-family: var(--font-body);
+    font-size: 0.65rem;
     color: var(--gray-3);
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    transition: color 0.25s var(--ease);
+}
+
+.footer-legal-link:hover {
+    color: var(--white);
+}
+
+/* Copyright */
+.footer-bottom {
+    text-align: center;
+    padding-top: 24px;
+    border-top: 1px solid rgba(173, 255, 0, 0.12);
+    font-family: var(--font-body);
+    font-size: 0.65rem;
+    color: var(--gray-3);
+    letter-spacing: 0.08em;
+    position: relative;
+    z-index: 1;
 }
 
 /* ============================================
@@ -1143,105 +1258,237 @@ img { max-width: 100%; display: block; }
 [data-delay="3"] { transition-delay: 0.3s; }
 
 /* ============================================
-   WORKS — HORIZONTAL SCROLL
+   WORKS — FULLSCREEN STICKY STACK
    ============================================ */
 
 .works-outer {
-    padding: 0;
-    /* height set dynamically by JS */
+    position: relative;
+    /* height = 5 × 100vh, set by JS or CSS custom property */
+    height: calc(var(--works-count, 5) * 100vh);
+    border-top: 1px solid var(--accent);
 }
 
-.works-sticky {
+/* Each project is a fullscreen sticky panel */
+.projects-grid {
+    display: block; /* override the grid — each project stacks via sticky */
+}
+
+.project {
     position: sticky;
     top: 0;
     height: 100vh;
-    overflow: hidden;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: clamp(24px, 3vw, 44px);
-    padding: clamp(60px, 7vw, 100px) 0 clamp(28px, 3.5vw, 48px);
-}
-
-.works-sticky .section-top {
-    margin-bottom: 0;
-}
-
-/* Override grid → flex horizontal track */
-.works-sticky .projects-grid {
-    display: flex;
-    grid-template-columns: unset;
-    gap: 20px;
-    padding-left: clamp(24px, 4vw, 80px);
-    will-change: transform;
-    flex-shrink: 0;
-}
-
-.works-sticky .projects-grid .project {
-    flex-shrink: 0;
-    width: clamp(270px, 35vw, 480px);
-    grid-column: unset;
-}
-
-.works-sticky .projects-grid .project-wide {
-    width: clamp(380px, 52vw, 720px);
-    grid-column: unset;
-}
-
-.works-sticky .projects-grid .project-wide .project-img-inner {
-    aspect-ratio: 16/9;
-}
-
-/* Bottom bar */
-.works-bottom {
-    display: flex;
     align-items: center;
-    gap: 20px;
-    padding: 0 clamp(24px, 4vw, 80px);
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 0;
+    outline: none;
+    background: var(--panel-bg, #0a0a0a);
+    /* stacking: each card sits on top of the previous via z-index + JS */
+    z-index: 1;
+    transition: background 0.6s var(--ease), filter 0.5s var(--ease);
+    cursor: none;
 }
 
-.works-count {
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    color: var(--gray-3);
-    letter-spacing: 0.12em;
-    flex-shrink: 0;
-    min-width: 48px;
+.project:hover {
+    background: color-mix(in srgb, var(--panel-bg, #0a0a0a) 60%, #1a1a1a);
 }
 
-#worksCurrentNum {
-    color: var(--accent);
-    transition: opacity 0.2s ease;
+/* Apply the --grad to the image inner block */
+.project .project-img-inner {
+    background: var(--grad, linear-gradient(135deg, #1a1a2e, #16213e)) !important;
 }
 
-.works-count-total {
-    opacity: 0.5;
+/* Ghost number — cinematic background element */
+.project-bg-num {
+    position: absolute;
+    bottom: -0.1em;
+    right: -0.02em;
+    font-family: var(--font-display);
+    font-size: clamp(160px, 28vw, 340px);
+    font-weight: 900;
+    line-height: 0.85;
+    color: rgba(255, 255, 255, 0.035);
+    letter-spacing: -0.04em;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    transition: color 0.5s var(--ease);
 }
 
-.works-progress-wrap {
-    flex: 1;
-    height: 1px;
-    background: rgba(173, 255, 0, 0.1);
+.project:hover .project-bg-num {
+    color: rgba(173, 255, 0, 0.06);
+}
+
+/* Project image block — centred, constrained width */
+.project .project-img {
     position: relative;
+    width: clamp(300px, 55vw, 820px);
+    z-index: 2;
+    border-radius: 2px;
     overflow: hidden;
 }
 
-.works-progress-bar {
+.project .project-img-inner {
+    aspect-ratio: 16/9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.8s var(--ease), filter 0.5s var(--ease);
+}
+
+.project:hover .project-img-inner {
+    transform: scale(1.04);
+    filter: brightness(1.15) saturate(1.3);
+}
+
+.project-wide .project-img {
+    width: clamp(340px, 72vw, 1080px);
+}
+
+.project-wide .project-img-inner {
+    aspect-ratio: 21/9;
+}
+
+/* Project info — clip-path reveal on entry */
+.project .project-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 28px 4px 0;
+    z-index: 2;
+    text-align: center;
+}
+
+.project .project-name {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-weight: 900;
+    color: var(--white);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    /* clip-path reveal — starts clipped from bottom */
+    clip-path: inset(110% 0 0 0);
+    transform: translateY(12px);
+    transition: clip-path 0.9s var(--ease), transform 0.9s var(--ease), color 0.4s var(--ease);
+}
+
+.project.in-view .project-name {
+    clip-path: inset(0% 0 -15% 0);
+    transform: translateY(0);
+}
+
+.project:hover .project-name {
+    color: var(--accent);
+}
+
+.project .project-cat {
+    font-family: var(--font-body);
+    font-size: clamp(0.65rem, 1.2vw, 0.85rem);
+    color: var(--gray-3);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    /* clip-path reveal — slightly delayed */
+    clip-path: inset(110% 0 0 0);
+    transform: translateY(8px);
+    transition: clip-path 0.9s 0.12s var(--ease), transform 0.9s 0.12s var(--ease), color 0.4s var(--ease);
+}
+
+.project.in-view .project-cat {
+    clip-path: inset(0% 0 -15% 0);
+    transform: translateY(0);
+}
+
+.project:hover .project-cat {
+    color: var(--gray-4);
+}
+
+/* Accent line — appears on hover */
+.project-accent-line {
     position: absolute;
-    inset: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
     background: var(--accent);
     transform: scaleX(0);
     transform-origin: left;
+    transition: transform 0.6s var(--ease);
+    z-index: 5;
 }
 
-.works-drag-hint {
+.project-wide .project-accent-line {
+    background: var(--violet);
+}
+
+.project:hover .project-accent-line {
+    transform: scaleX(1);
+}
+
+/* Number label inside the image (already existed, keep subtle) */
+.project-img-label {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 900;
+    color: rgba(173, 255, 0, 0.06);
+    user-select: none;
+    transition: color 0.4s var(--ease);
+    z-index: 1;
+    position: relative;
+}
+
+.project:hover .project-img-label {
+    color: rgba(173, 255, 0, 0.14);
+}
+
+/* Section header — sticky overlay, sits above the sticky panels */
+.works-header {
+    position: sticky;
+    top: clamp(72px, 10vh, 96px);
+    left: 0;
+    z-index: 50;
+    pointer-events: none;
+    padding: 0 clamp(24px, 4vw, 80px);
+    /* height: 0 collapses the header so it doesn't push projects down */
+    height: 0;
+    overflow: visible;
+}
+
+.works-heading {
+    font-size: clamp(1.4rem, 3vw, 2.8rem);
+}
+
+/* Progress counter — sticky bottom-right, above the panels */
+.works-counter {
+    position: sticky;
+    bottom: clamp(24px, 4vh, 48px);
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-left: auto;
+    width: fit-content;
+    padding-right: clamp(24px, 4vw, 80px);
+    z-index: 50;
+    pointer-events: none;
     font-family: var(--font-body);
-    font-size: 0.55rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.14em;
     color: var(--gray-3);
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    flex-shrink: 0;
-    opacity: 0.6;
+}
+
+.works-counter-current {
+    font-size: 1.1rem;
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-weight: 900;
+    transition: opacity 0.2s ease;
+}
+
+.works-counter-sep,
+.works-counter-total {
+    opacity: 0.5;
 }
 
 /* ============================================
@@ -1309,44 +1556,75 @@ img { max-width: 100%; display: block; }
         padding: 0 12px;
     }
 
-    /* Works — revert horizontal scroll to normal grid */
+    /* Works — revert fullscreen sticky to simple vertical grid on mobile */
     .works-outer {
-        padding: clamp(80px, 10vw, 160px) 0 !important;
         height: auto !important;
+        padding: clamp(60px, 8vw, 100px) 0;
     }
 
-    .works-sticky {
+    .works-header {
+        position: static;
+        padding: 0 clamp(24px, 4vw, 48px) 40px;
+        pointer-events: auto;
+    }
+
+    .works-heading {
+        font-size: clamp(1.8rem, 7vw, 3rem);
+    }
+
+    .works-counter {
+        display: none;
+    }
+
+    .projects-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2px;
+        padding: 0 clamp(16px, 4vw, 48px);
+    }
+
+    .project {
         position: static !important;
         height: auto !important;
-        overflow: visible !important;
-        padding: 0 !important;
-        gap: 48px !important;
+        min-height: 0 !important;
+        padding: 32px 0;
+        display: block;
+        border-bottom: 1px solid rgba(173, 255, 0, 0.12);
     }
 
-    .works-sticky .projects-grid {
-        display: grid !important;
-        grid-template-columns: 1fr !important;
-        transform: none !important;
-        padding-left: 0 !important;
-        will-change: auto !important;
-    }
-
-    .works-sticky .projects-grid .project {
-        width: auto !important;
-        flex-shrink: unset !important;
-    }
-
-    .works-sticky .projects-grid .project-wide {
-        width: auto !important;
-        grid-column: span 1 !important;
-    }
-
-    .works-sticky .projects-grid .project-wide .project-img-inner {
-        aspect-ratio: 16/10 !important;
-    }
-
-    .works-bottom {
+    .project-bg-num {
         display: none;
+    }
+
+    .project .project-img {
+        width: 100%;
+    }
+
+    .project-wide .project-img {
+        width: 100%;
+    }
+
+    .project-wide .project-img-inner {
+        aspect-ratio: 16/9 !important;
+    }
+
+    .project .project-info {
+        align-items: flex-start;
+        text-align: left;
+        padding: 20px 0 0;
+    }
+
+    .project .project-name {
+        font-size: clamp(1.4rem, 6vw, 2.2rem);
+        clip-path: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
+
+    .project .project-cat {
+        clip-path: none !important;
+        transform: none !important;
+        opacity: 1 !important;
     }
 
     /* Heading clip reveal — reduce on mobile */
@@ -1365,18 +1643,6 @@ img { max-width: 100%; display: block; }
         clip-path: none;
         opacity: 1;
         transform: translateY(0);
-    }
-
-    .projects-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .project-wide {
-        grid-column: span 1;
-    }
-
-    .project-wide .project-img-inner {
-        aspect-ratio: 16/10;
     }
 
     .about-stats {
@@ -1398,16 +1664,15 @@ img { max-width: 100%; display: block; }
 
     .service:hover { padding-left: 0; }
 
-    .footer-top {
-        flex-direction: column;
-        gap: 24px;
-        text-align: center;
+    /* Footer — 2 colonnes sur tablette */
+    .footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 40px 32px;
     }
 
-    .footer-bottom {
-        flex-direction: column;
-        gap: 8px;
-        text-align: center;
+    .footer-col--signature {
+        grid-column: span 2;
+        order: -1;
     }
 }
 
@@ -1429,9 +1694,23 @@ img { max-width: 100%; display: block; }
         gap: 32px;
     }
 
-    .footer-socials {
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: 20px;
+    /* Footer — 1 colonne sur mobile */
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 36px;
+        padding: 48px 0 32px;
+    }
+
+    .footer-col--signature {
+        grid-column: span 1;
+        order: -1;
+    }
+
+    .footer-signature {
+        font-size: clamp(2.8rem, 14vw, 4rem);
+    }
+
+    .footer-bottom {
+        font-size: 0.6rem;
     }
 }

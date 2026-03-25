@@ -10,7 +10,7 @@ if ('scrollRestoration' in history) {
 // ============================================
 window.addEventListener('load', () => {
     window.scrollTo(0, 0);
-    initHorizontalScroll();
+    initStickyProjects();
     setTimeout(() => {
         document.getElementById('loader').classList.add('hidden');
         document.body.style.overflow = '';
@@ -315,94 +315,82 @@ form.addEventListener('submit', (e) => {
 });
 
 // ============================================
-// HORIZONTAL SCROLL — WORKS SECTION
+// STICKY STACK — WORKS SECTION
 // ============================================
-function initHorizontalScroll() {
-    const outer   = document.querySelector('.works-outer');
-    const track   = document.getElementById('projectsTrack');
-    const bar     = document.getElementById('worksProgressBar');
-    const numEl   = document.getElementById('worksCurrentNum');
-    const projects = track ? track.querySelectorAll('.project') : [];
+function initStickyProjects() {
+    const outer    = document.querySelector('.works-outer');
+    const projects = outer ? outer.querySelectorAll('.project') : [];
+    const numEl    = document.getElementById('worksCurrentNum');
 
-    if (!outer || !track || window.innerWidth <= 768) return;
+    if (!outer || projects.length === 0) return;
 
-    let trackOverflow = 0;
-    let currentX  = 0;
-    let targetX   = 0;
-    let rafId     = null;
+    const count = projects.length;
 
-    // — Lerp animation loop —
-    function animateTrack() {
-        const diff = targetX - currentX;
-        if (Math.abs(diff) < 0.05) {
-            currentX = targetX;
-            rafId = null;
-        } else {
-            currentX += diff * 0.10;
-            rafId = requestAnimationFrame(animateTrack);
-        }
-        track.style.transform = `translateX(${currentX}px)`;
-
-        if (bar) bar.style.transform = `scaleX(${Math.abs(currentX) / trackOverflow})`;
-
-        // Counter
-        if (numEl && projects.length > 0) {
-            const p   = Math.abs(currentX) / trackOverflow;
-            const idx = Math.min(projects.length - 1, Math.round(p * (projects.length - 1)));
-            numEl.textContent = String(idx + 1).padStart(2, '0');
-        }
+    // — Set section height to count × 100vh (CSS custom property fallback) —
+    function setHeight() {
+        outer.style.height = (window.innerHeight * count) + 'px';
     }
+    setHeight();
+    window.addEventListener('resize', setHeight);
 
-    // — Scroll handler —
+    // — Assign stacking z-indexes so each card sits above the previous —
+    projects.forEach((p, i) => {
+        p.style.zIndex = i + 1;
+    });
+
+    // — Scroll: determine which project is currently "active" (centred on screen) —
     function onScroll() {
-        if (trackOverflow === 0) return;
-        const outerTop  = outer.getBoundingClientRect().top + window.scrollY;
-        const scrolled  = window.scrollY - outerTop;
-        const progress  = Math.max(0, Math.min(1, scrolled / trackOverflow));
-        targetX = -trackOverflow * progress;
-        if (!rafId) rafId = requestAnimationFrame(animateTrack);
-    }
+        if (window.innerWidth <= 768) return;
 
-    // — Resize: recalculate track overflow + section height —
-    function onResize() {
-        track.style.transform = 'translateX(0)';
-        currentX = 0;
-        targetX  = 0;
-        requestAnimationFrame(() => {
-            trackOverflow = Math.max(0, track.scrollWidth - window.innerWidth);
-            if (trackOverflow > 0) {
-                outer.style.height = (window.innerHeight + trackOverflow) + 'px';
+        const outerTop = outer.getBoundingClientRect().top + window.scrollY;
+        const scrolled = window.scrollY - outerTop;
+        const panelH   = window.innerHeight;
+
+        projects.forEach((p, i) => {
+            // Each panel occupies scrolled range [i*panelH, (i+1)*panelH)
+            const panelStart = i * panelH;
+            const panelEnd   = (i + 1) * panelH;
+            const isActive   = scrolled >= panelStart && scrolled < panelEnd;
+
+            if (isActive) {
+                p.classList.add('in-view');
+                if (numEl) numEl.textContent = String(i + 1).padStart(2, '0');
+            } else {
+                // Keep in-view once triggered (reveal stays visible)
+                if (scrolled >= panelStart) {
+                    p.classList.add('in-view');
+                }
             }
-            onScroll();
         });
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onResize);
-    onResize();
+    // Trigger once on init
+    onScroll();
 }
 
 // ============================================
-// MAGNETIC EFFECT ON PROJECTS (Desktop)
+// PARALLAX IMAGE — PROJECTS (Desktop)
+// Projects are now fullscreen — apply subtle parallax to the image block
 // ============================================
 if (window.innerWidth > 768) {
     const projects = document.querySelectorAll('.project');
 
     projects.forEach(project => {
+        const imgInner = project.querySelector('.project-img-inner');
+        if (!imgInner) return;
+
         project.addEventListener('mousemove', (e) => {
             const rect = project.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const moveX = (x - centerX) / 30;
-            const moveY = (y - centerY) / 30;
-
-            project.style.transform = `scale(1.02) translate(${moveX}px, ${moveY}px)`;
+            const x = (e.clientX - rect.left) / rect.width  - 0.5;  // -0.5 → 0.5
+            const y = (e.clientY - rect.top)  / rect.height - 0.5;
+            const moveX = x * 12;
+            const moveY = y * 6;
+            imgInner.style.transform = `scale(1.06) translate(${moveX}px, ${moveY}px)`;
         });
 
         project.addEventListener('mouseleave', () => {
-            project.style.transform = '';
+            imgInner.style.transform = '';
         });
     });
 }
