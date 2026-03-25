@@ -384,9 +384,9 @@ if (window.innerWidth > 768) {
             const rect = project.getBoundingClientRect();
             const x = (e.clientX - rect.left) / rect.width  - 0.5;  // -0.5 → 0.5
             const y = (e.clientY - rect.top)  / rect.height - 0.5;
-            const moveX = x * 12;
-            const moveY = y * 6;
-            imgInner.style.transform = `scale(1.06) translate(${moveX}px, ${moveY}px)`;
+            const moveX = x * 18;
+            const moveY = y * 10;
+            imgInner.style.transform = `scale(1.08) translate(${moveX}px, ${moveY}px)`;
         });
 
         project.addEventListener('mouseleave', () => {
