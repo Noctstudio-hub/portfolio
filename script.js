@@ -350,15 +350,16 @@ function initStickyProjects() {
         const panelH   = window.innerHeight;
 
         projects.forEach((p, i) => {
+            const anticipate = panelH * 0.15;
             const panelStart = i * panelH;
             const panelEnd   = (i + 1) * panelH;
-            const isActive   = scrolled >= panelStart && scrolled < panelEnd;
+            const isActive   = scrolled >= panelStart - anticipate && scrolled < panelEnd;
 
             if (isActive) {
                 p.classList.add('in-view');
-                if (numEl) numEl.textContent = String(i + 1).padStart(2, '0');
+                if (scrolled >= panelStart && numEl) numEl.textContent = String(i + 1).padStart(2, '0');
             } else {
-                if (scrolled >= panelStart) {
+                if (scrolled >= panelStart - anticipate) {
                     p.classList.add('in-view');
                 }
             }
