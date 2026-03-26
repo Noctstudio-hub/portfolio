@@ -597,6 +597,8 @@ img { max-width: 100%; display: block; }
 .section {
     padding: clamp(80px, 10vw, 160px) 0;
     border-top: 1px solid var(--accent);
+    position: relative;
+    isolation: isolate;
 }
 
 .section-dark {
@@ -1154,6 +1156,7 @@ img { max-width: 100%; display: block; }
 
 .footer {
     position: relative;
+    isolation: isolate;
     background: var(--black);
     overflow: hidden;
 }
@@ -1460,12 +1463,10 @@ img { max-width: 100%; display: block; }
 /* ── WORKS SCROLL ZONE — wrapper sticky pour la section entière ── */
 .works-scroll-zone {
     position: relative;
-    height: 300vh;
 }
 
 .works-outer {
-    position: sticky;
-    top: 0;
+    position: relative;
 }
 
 /* Each project is a fullscreen sticky panel */
@@ -1677,14 +1678,6 @@ img { max-width: 100%; display: block; }
     border: 1px solid rgba(173, 255, 0, 0.15);
     margin-top: 20px;
     width: clamp(200px, 30vw, 340px);
-    clip-path: inset(110% 0 0 0);
-    transform: translateY(8px);
-    transition: clip-path 900ms 300ms var(--ease), transform 500ms 300ms var(--ease);
-}
-
-.project.in-view .project-meta-grid {
-    clip-path: inset(0% 0 -15% 0);
-    transform: translateY(0);
 }
 
 .project-meta-cell {
@@ -1741,7 +1734,7 @@ img { max-width: 100%; display: block; }
     position: sticky;
     top: clamp(72px, 10vh, 96px);
     left: 0;
-    z-index: 50;
+    z-index: 10;
     pointer-events: none;
     padding: 0 clamp(24px, 4vw, 80px);
     /* height: 0 collapses the header so it doesn't push projects down */
@@ -1763,7 +1756,7 @@ img { max-width: 100%; display: block; }
     margin-left: auto;
     width: fit-content;
     padding-right: clamp(24px, 4vw, 80px);
-    z-index: 50;
+    z-index: 10;
     pointer-events: none;
     font-family: var(--font-body);
     font-size: 0.65rem;

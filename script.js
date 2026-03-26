@@ -326,9 +326,12 @@ function initStickyProjects() {
 
     const count = projects.length;
 
-    // — Set section height to count × 100vh —
+    // — Set scroll zone + outer height to count × 100vh —
+    const scrollZone = outer.parentElement;
     function setHeight() {
-        outer.style.height = (window.innerHeight * count) + 'px';
+        const h = (window.innerHeight * count) + 'px';
+        scrollZone.style.height = h;
+        outer.style.height = h;
     }
     setHeight();
     window.addEventListener('resize', setHeight, { passive: true });
