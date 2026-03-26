@@ -1452,147 +1452,79 @@ img { max-width: 100%; display: block; }
 
 .works-outer {
     position: relative;
-    /* height naturelle = somme des .project-sticky-wrapper (5 × 250vh) */
+    /* height = JS sets count × 100vh via initStickyProjects() */
     border-top: 1px solid var(--accent);
     isolation: isolate;
 }
 
-/* ── STICKY WRAPPER — chaque projet a son propre wrapper 250vh ── */
-.project-sticky-wrapper {
+/* ── WORKS SCROLL ZONE — wrapper sticky pour la section entière ── */
+.works-scroll-zone {
     position: relative;
-    height: 250vh;
+    height: 300vh;
 }
 
-/* ── PROJECT CARD — sticky fullscreen dans son wrapper ── */
-.project-card {
+.works-outer {
+    position: sticky;
+    top: 0;
+}
+
+/* Each project is a fullscreen sticky panel */
+.projects-grid {
+    display: block; /* override the grid — each project stacks via sticky */
+}
+
+.project {
     position: sticky;
     top: 0;
     height: 100vh;
-    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
     overflow: hidden;
-    cursor: none;
-    display: block;
-    z-index: 1;
-}
-
-/* Fond plein écran — utilise la CSS var --grad définie inline */
-.project-card-bg {
-    position: absolute;
-    inset: 0;
-    background: var(--grad, linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0d3b6e 100%));
-    background-size: cover;
-    background-position: center;
-    z-index: 0;
-    transform: scale(1.0);
-    transition: transform 900ms var(--ease), filter 500ms var(--ease);
-    will-change: transform;
-}
-
-.project-card:hover .project-card-bg {
-    transform: scale(1.05);
-    filter: brightness(1.06) saturate(1.15);
-}
-
-/* Overlay sombre bas→haut pour lisibilité du contenu */
-.project-card-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0.88) 0%,
-        rgba(0, 0, 0, 0.35) 45%,
-        rgba(0, 0, 0, 0.10) 100%
-    );
-    z-index: 1;
-    pointer-events: none;
-}
-
-/* Contenu texte — positionné bas-gauche */
-.project-card-content {
-    position: absolute;
-    bottom: clamp(48px, 8vh, 96px);
-    left: clamp(40px, 6vw, 100px);
-    right: 40%;
-    z-index: 3;
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-/* Ligne meta : numéro + catégorie */
-.project-card-meta {
-    display: flex;
-    align-items: baseline;
-    gap: 20px;
-}
-
-.project-card-num {
-    font-family: var(--font-body);
-    font-size: 0.65rem;
-    color: var(--accent);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    opacity: 0.7;
-}
-
-/* Override clip-path dans le contexte card — visible sans .in-view */
-.project-card-content .project-name {
-    clip-path: inset(0% 0 -15% 0);
-    transform: translateY(0);
-}
-
-.project-card:hover .project-card-content .project-name {
-    color: var(--accent);
-    transform: translateY(-6px);
-}
-
-.project-card-content .project-cat {
-    clip-path: inset(0% 0 -15% 0);
-    transform: translateY(0);
-}
-
-.project-card:hover .project-card-content .project-cat {
-    color: rgba(173, 255, 0, 0.7);
-    transform: translateY(-4px);
-}
-
-/* Meta-grid dans card — visible par défaut, reveal JS */
-.project-card-content .project-meta-grid {
-    clip-path: none;
-    transform: translateY(10px);
-    opacity: 0;
-    max-width: 320px;
-    margin-top: 0;
-    transition: opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s;
-}
-
-/* Ghost number — toujours bas-droite dans la card */
-.project-card .project-bg-num {
-    position: absolute;
-    bottom: -0.05em;
-    right: -0.02em;
-    left: auto;
-    font-size: clamp(200px, 30vw, 400px);
-    color: rgba(255, 255, 255, 0.04);
-    z-index: 2;
-}
-
-.project-card:hover .project-bg-num {
-    color: rgba(173, 255, 0, 0.06);
-}
-
-/* Accent line — au-dessus de l'overlay */
-.project-card .project-accent-line {
-    z-index: 6;
-}
-
-/* Reset .project pour compatibilité avec les sous-règles existantes */
-.project {
-    position: relative;
-    display: block;
-    background: transparent;
+    border-radius: 0;
     outline: none;
+    background: var(--panel-bg, #0a0a0a);
+    z-index: 1;
+    transition: background 0.6s var(--ease);
     cursor: none;
+}
+
+/* Alternating layout — even projects flip image/text sides */
+.project:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.project:hover {
+    background: color-mix(in srgb, var(--panel-bg, #0a0a0a) 60%, #1a1a1a);
+}
+
+/* Gradient de liaison entre l'image et le panneau texte */
+.project .project-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: linear-gradient(
+        to right,
+        transparent 55%,
+        rgba(10, 10, 10, 0.75) 100%
+    );
+    transition: opacity 500ms var(--ease-out);
+}
+
+/* Pour les projets pairs (image à droite) — gradient inversé */
+.project:nth-child(even) .project-img::after {
+    background: linear-gradient(
+        to left,
+        transparent 55%,
+        rgba(10, 10, 10, 0.75) 100%
+    );
+}
+
+/* Apply the --grad to the image inner block */
+.project .project-img-inner {
+    background: var(--grad, linear-gradient(135deg, #1a1a2e, #16213e)) !important;
 }
 
 /* Ghost number — cinematic background element */
@@ -1913,9 +1845,15 @@ img { max-width: 100%; display: block; }
         padding: 0 12px;
     }
 
-    /* Works — sticky wrappers mobile : hauteur réduite */
-    .project-sticky-wrapper {
-        height: 150vh;
+    /* Works — revert fullscreen sticky to simple vertical grid on mobile */
+    .works-scroll-zone {
+        height: auto;
+    }
+
+    .works-outer {
+        position: static;
+        height: auto !important;
+        padding: clamp(60px, 8vw, 100px) 0;
     }
 
     .works-header {
@@ -1932,26 +1870,80 @@ img { max-width: 100%; display: block; }
         display: none;
     }
 
-    /* Contenu card mobile — marges resserrées */
-    .project-card-content {
-        left: 20px;
-        right: 20px;
-        bottom: 40px;
+    .projects-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2px;
+        padding: 0 clamp(16px, 4vw, 48px);
     }
 
-    /* Meta-grid trop dense sur mobile */
-    .project-card-content .project-meta-grid {
+    .project,
+    .project:nth-child(even) {
+        position: static !important;
+        height: auto !important;
+        min-height: 0 !important;
+        padding: 0;
+        display: flex;
+        flex-direction: column !important;
+        border-bottom: 1px solid rgba(173, 255, 0, 0.12);
+        overflow: hidden;
+    }
+
+    .project-bg-num {
         display: none;
     }
 
-    /* Ghost number réduit */
-    .project-card .project-bg-num {
-        font-size: clamp(120px, 40vw, 200px);
+    .project .project-img {
+        position: static !important;
+        inset: auto !important;
+        width: 100% !important;
+        height: auto !important;
     }
 
-    /* Titre adapté mobile */
-    .project-card-content .project-name {
-        font-size: clamp(2.2rem, 9vw, 4rem);
+    .project .project-img-inner {
+        aspect-ratio: 16/9 !important;
+        width: 100% !important;
+        height: auto !important;
+        will-change: auto;
+    }
+
+    .project-wide .project-img {
+        position: static !important;
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    .project-wide .project-img-inner {
+        aspect-ratio: 16/9 !important;
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    .project .project-img::after {
+        display: none;
+    }
+
+    .project .project-info {
+        align-items: flex-start;
+        justify-content: flex-start;
+        text-align: left;
+        padding: 16px 0 20px;
+        background: transparent;
+        flex: none;
+        width: 100%;
+    }
+
+    .project .project-name {
+        font-size: clamp(1.4rem, 6vw, 2.2rem);
+        clip-path: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
+
+    .project .project-cat {
+        clip-path: none !important;
+        transform: none !important;
+        opacity: 1 !important;
     }
 
     /* Heading reveal mobile — identique au desktop (déjà opacity+transform) */

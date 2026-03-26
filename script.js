@@ -315,125 +315,76 @@ form.addEventListener('submit', (e) => {
 });
 
 // ============================================
-// STICKY STACK — WORKS SECTION (250vh par wrapper)
+// STICKY STACK — WORKS SECTION
 // ============================================
 function initStickyProjects() {
-    const wrappers = document.querySelectorAll('.project-sticky-wrapper');
-    const cards    = document.querySelectorAll('.project-card');
+    const outer    = document.querySelector('.works-outer');
+    const projects = outer ? outer.querySelectorAll('.project') : [];
     const numEl    = document.getElementById('worksCurrentNum');
 
-    if (!wrappers.length) return;
+    if (!outer || projects.length === 0) return;
 
-    // Hauteur d'un wrapper en px (250vh desktop, 150vh mobile)
-    function getWrapperH() {
-        return window.innerHeight * (window.innerWidth <= 768 ? 1.5 : 2.5);
+    const count = projects.length;
+
+    // — Set section height to count × 100vh —
+    function setHeight() {
+        outer.style.height = (window.innerHeight * count) + 'px';
     }
+    setHeight();
+    window.addEventListener('resize', setHeight, { passive: true });
 
-    // Z-index croissants — chaque card au-dessus de la précédente
-    cards.forEach((card, i) => {
-        card.style.zIndex = i + 1;
+    // — Assign stacking z-indexes —
+    projects.forEach((p, i) => {
+        p.style.zIndex = i + 1;
     });
 
-    // ── IntersectionObserver — reveals de contenu ──
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            const idx  = Array.from(wrappers).indexOf(entry.target);
-            if (idx === -1) return;
-            const card = cards[idx];
-            if (!card) return;
-
-            if (entry.isIntersecting) {
-                card.classList.add('in-view');
-                const meta = card.querySelector('.project-meta-grid');
-                if (meta) {
-                    meta.style.opacity   = '1';
-                    meta.style.transform = 'translateY(0)';
-                }
-            } else {
-                const rect = entry.target.getBoundingClientRect();
-                if (rect.bottom < 0) card.classList.add('was-active');
-            }
-        });
-    }, { threshold: 0.10 });
-
-    wrappers.forEach(w => revealObserver.observe(w));
-
-    // ── Scroll + rAF — compteur + animations de sortie ──
-    let rafPending = false;
-
-    function updateScroll() {
-        rafPending = false;
-        const wrapperH = getWrapperH();
-        const scrollY  = window.scrollY;
-        const vh       = window.innerHeight;
-
-        wrappers.forEach((wrapper, i) => {
-            const card      = cards[i];
-            if (!card) return;
-            const wrapperTop = wrapper.getBoundingClientRect().top + scrollY;
-            const relScroll  = scrollY - wrapperTop;
-
-            if (relScroll < 0 || relScroll > wrapperH) {
-                if (relScroll < 0) {
-                    const content = card.querySelector('.project-card-content');
-                    if (content) { content.style.transform = ''; content.style.opacity = ''; }
-                }
-                return;
-            }
-
-            const progress = relScroll / wrapperH;
-            const isStuck  = relScroll >= 0 && relScroll <= (wrapperH - vh);
-
-            if (isStuck && numEl) {
-                numEl.textContent = String(i + 1).padStart(2, '0');
-            }
-
-            // Animation de sortie (phase 0.6 → 1)
-            const content = card.querySelector('.project-card-content');
-            if (!content) return;
-
-            if (progress > 0.6) {
-                const t = (progress - 0.6) / 0.4;
-                content.style.transform = `translateY(${t * -20}px)`;
-                content.style.opacity   = String(1 - t * 0.4);
-            } else {
-                content.style.transform = '';
-                content.style.opacity   = '';
-            }
-        });
-    }
-
+    // — Scroll: determine which project is active —
     function onScroll() {
         if (window.innerWidth <= 768) return;
-        if (!rafPending) { rafPending = true; requestAnimationFrame(updateScroll); }
+
+        const outerTop = outer.getBoundingClientRect().top + window.scrollY;
+        const scrolled = window.scrollY - outerTop;
+        const panelH   = window.innerHeight;
+
+        projects.forEach((p, i) => {
+            const panelStart = i * panelH;
+            const panelEnd   = (i + 1) * panelH;
+            const isActive   = scrolled >= panelStart && scrolled < panelEnd;
+
+            if (isActive) {
+                p.classList.add('in-view');
+                if (numEl) numEl.textContent = String(i + 1).padStart(2, '0');
+            } else {
+                if (scrolled >= panelStart) {
+                    p.classList.add('in-view');
+                }
+            }
+        });
     }
 
     window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', () => {
-        if (!rafPending) { rafPending = true; requestAnimationFrame(updateScroll); }
-    }, { passive: true });
-
-    updateScroll();
+    onScroll();
 }
 
 // ============================================
-// PARALLAX IMAGE — PROJECT CARDS (Desktop)
-// Mousemove sur .project-card → translate sur .project-card-bg
+// PARALLAX IMAGE — PROJECTS (Desktop)
 // ============================================
 if (window.innerWidth > 768) {
-    document.querySelectorAll('.project-card').forEach(card => {
-        const bg = card.querySelector('.project-card-bg');
-        if (!bg) return;
+    const projects = document.querySelectorAll('.project');
 
-        card.addEventListener('mousemove', (e) => {
-            const rect = card.getBoundingClientRect();
-            const x = (e.clientX - rect.left)  / rect.width  - 0.5;
-            const y = (e.clientY - rect.top)    / rect.height - 0.5;
-            bg.style.transform = `scale(1.08) translate(${x * 18}px, ${y * 10}px)`;
-        }, { passive: true });
+    projects.forEach(project => {
+        const imgInner = project.querySelector('.project-img-inner');
+        if (!imgInner) return;
 
-        card.addEventListener('mouseleave', () => {
-            bg.style.transform = '';
+        project.addEventListener('mousemove', (e) => {
+            const rect = project.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width  - 0.5;
+            const y = (e.clientY - rect.top)  / rect.height - 0.5;
+            imgInner.style.transform = `scale(1.08) translate(${x * 18}px, ${y * 10}px)`;
+        });
+
+        project.addEventListener('mouseleave', () => {
+            imgInner.style.transform = '';
         });
     });
 }
